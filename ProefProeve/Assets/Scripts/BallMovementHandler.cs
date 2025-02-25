@@ -66,15 +66,18 @@ public class BallMovementHandler : MonoBehaviour
 
     private void ApplyCurving()
     {
-        if (_controller.BatObject != null)
+        // Use the player object for curving if available, otherwise fall back to the bat
+        GameObject targetObject = _controller.PlayerObject != null ? _controller.PlayerObject : _controller.BatObject;
+        
+        if (targetObject != null)
         {
-            Vector3 toPlayer = (_controller.BatObject.transform.position - transform.position).normalized;
+            Vector3 toTarget = (targetObject.transform.position - transform.position).normalized;
             
             // Reduce curve effect when currentSpeed is higher than baseSpeed
             float effectiveCurve = (_controller.CurveStrength * _controller.CurveResponse * Time.fixedDeltaTime) * 
                                   (_controller.BaseSpeed / _currentSpeed);
             
-            Vector3 newDir = Vector3.Slerp(_rb.velocity.normalized, toPlayer, effectiveCurve).normalized;
+            Vector3 newDir = Vector3.Slerp(_rb.velocity.normalized, toTarget, effectiveCurve).normalized;
             _rb.velocity = newDir * _currentSpeed;
             _direction = newDir;
         }

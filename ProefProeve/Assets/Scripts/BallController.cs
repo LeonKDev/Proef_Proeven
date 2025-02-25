@@ -14,6 +14,7 @@ public class BallController : MonoBehaviour
     // Bat interaction settings
     [Header("Bat Interaction")]
     [SerializeField] private GameObject batObject;
+    [SerializeField] private GameObject playerObject; // Added reference to the player object
     [SerializeField] private float normalBounceMultiplier = 2f; // For 1-2 unit range
     [SerializeField] private float closeRangeBounceMultiplier = 3.5f; // For 0-1 unit range
     
@@ -32,6 +33,7 @@ public class BallController : MonoBehaviour
     public float BoostMultiplier => boostMultiplier;
     public float BoostDuration => boostDuration;
     public GameObject BatObject => batObject;
+    public GameObject PlayerObject => playerObject; // New property to access player object
     public float NormalBounceMultiplier => normalBounceMultiplier;
     public float CloseRangeBounceMultiplier => closeRangeBounceMultiplier;
     public float CurveStrength => curveStrength;
@@ -56,17 +58,25 @@ public class BallController : MonoBehaviour
     private void Update()
     {
         // Check for bat hit input
-        if (Input.GetKeyDown(KeyCode.E) && batObject != null)
+        if (Input.GetKeyDown(KeyCode.E) && batObject != null && playerObject != null)
         {
             float distanceToBat = Vector3.Distance(transform.position, batObject.transform.position);
             if (distanceToBat <= 4f)
             {
-                Vector3 batDirection = batObject.transform.forward;
+                // Use player's forward direction instead of bat's forward
+                Vector3 playerDirection = playerObject.transform.forward;
                 float bounceMultiplier = distanceToBat <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
-                _boostHandler.ApplyBatBoost(batDirection, bounceMultiplier);
+                _boostHandler.ApplyBatBoost(playerDirection, bounceMultiplier);
             }
         }
-        
-        Debug.Log(Vector3.Distance(transform.position, batObject != null ? batObject.transform.position : Vector3.zero));
+    }
+    
+    /// <summary>
+    /// Returns the last GameObject that the ball collided or triggered with.
+    /// </summary>
+    /// <returns>The GameObject from the last collision or trigger event, or null if none has occurred.</returns>
+    public GameObject GetLastCollidedObject()
+    {
+        return _collisionHandler.GetLastCollidedObject();
     }
 }
