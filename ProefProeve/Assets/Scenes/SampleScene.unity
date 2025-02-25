@@ -1227,8 +1227,8 @@ GameObject:
   - component: {fileID: 1983872743}
   - component: {fileID: 1983872742}
   - component: {fileID: 1983872741}
-  - component: {fileID: 1983872740}
   - component: {fileID: 1983872739}
+  - component: {fileID: 1983872745}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -1263,26 +1263,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 4
   m_CollisionDetection: 0
---- !u!114 &1983872740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983872738}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98322486db1b4445b471a7f7b507c6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseSpeed: 30
-  boostMultiplier: 1
-  boostDuration: 3
-  batObject: {fileID: 2051630806}
-  normalBounceMultiplier: 2
-  closeRangeBounceMultiplier: 2
-  curveStrength: 0.25
-  curveResponse: 2
 --- !u!135 &1983872741
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1369,6 +1349,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1983872745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983872738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9d314d0bd2a994cb4bf95aa08f0b42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseSpeed: 30
+  boostMultiplier: 1
+  boostDuration: 3
+  batObject: {fileID: 1394806072}
+  normalBounceMultiplier: 2
+  closeRangeBounceMultiplier: 2
+  curveStrength: 0.25
+  curveResponse: 2
 --- !u!1 &2051630806
 GameObject:
   m_ObjectHideFlags: 0
