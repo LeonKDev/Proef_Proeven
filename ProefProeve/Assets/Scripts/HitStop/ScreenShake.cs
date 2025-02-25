@@ -10,6 +10,8 @@ public class ScreenShake : MonoBehaviour
 
     private void Update()
     {
+        //when bool start = true screenshake effect will start for length of duration
+        //set start to true in the script where you want this to take effect
         if (start)
         {
             start = false;
@@ -19,17 +21,21 @@ public class ScreenShake : MonoBehaviour
 
     IEnumerator Shaking()
     {
+        //Store startPosition to reset the camera to this position after screen shake
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
 
+        //while elapsed time is less than duration the screen will shake based on the intensity of the curve
         while(elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float strength =curve.Evaluate(elapsedTime / duration);
+
+            /*curve should be changed based on type of collision*/
+            float strength = curve.Evaluate(elapsedTime / duration);
+
             transform.position = startPosition + Random.insideUnitSphere * strength;
             yield return null;
         }
-
         transform.position = startPosition;
     }
 }
