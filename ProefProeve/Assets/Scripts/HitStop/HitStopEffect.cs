@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class HitStopEffect : MonoBehaviour
 {
+    /* 
+       This script should be attached to Main Camera
+       Add this line of code  in the script where you'd like the screen shake to take effect:
+       StartCoroutine(_hitStopEffect.HitStopCoroutine(timeToPause));
+       timeToPause should be a different value for every different type of collision
+    */
+
     private bool paused;
 
     public void Pause()
