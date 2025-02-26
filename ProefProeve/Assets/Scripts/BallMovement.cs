@@ -14,7 +14,7 @@ public class BallMovement : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 lastValidDirection;
-    private float currentSpeed;
+    public float currentSpeed;
     // Reintroduced boost state variables
     private float boostTimeRemaining;
     private float initialBoostSpeed;
