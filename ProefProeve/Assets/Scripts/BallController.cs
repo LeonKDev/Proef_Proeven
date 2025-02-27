@@ -1,4 +1,5 @@
 using UnityEngine;
+using BallGame.Shared;
 
 public class BallController : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class BallController : MonoBehaviour
     [SerializeField] private float normalBounceMultiplier = 2f; // For 1-2 unit range
     [SerializeField] private float closeRangeBounceMultiplier = 3.5f; // For 0-1 unit range
     
+    // Ball ownership
+    [Header("Ball Ownership")]
+    [SerializeField] private BallOwnerType ballOwner = BallOwnerType.Boss;
+    
     // Curving behavior settings
     [Header("Curving Behavior")]
     [SerializeField] private float curveStrength = 0.02f; // How much to adjust the direction
@@ -27,6 +32,7 @@ public class BallController : MonoBehaviour
     private BallMovementHandler _movementHandler;
     private BallBoostHandler _boostHandler;
     private BallCollisionHandler _collisionHandler;
+    private BallOwnerHandler _ownerHandler;
     
     // Properties to access settings from other components
     public float BaseSpeed => baseSpeed;
@@ -38,6 +44,13 @@ public class BallController : MonoBehaviour
     public float CloseRangeBounceMultiplier => closeRangeBounceMultiplier;
     public float CurveStrength => curveStrength;
     public float CurveResponse => curveResponse;
+    
+    // Property for ball owner
+    public BallOwnerType BallOwner 
+    { 
+        get => ballOwner;
+        set => ballOwner = value;
+    }
 
     private void Awake()
     {
@@ -45,6 +58,7 @@ public class BallController : MonoBehaviour
         _movementHandler = gameObject.AddComponent<BallMovementHandler>();
         _boostHandler = gameObject.AddComponent<BallBoostHandler>();
         _collisionHandler = gameObject.AddComponent<BallCollisionHandler>();
+        _ownerHandler = gameObject.AddComponent<BallOwnerHandler>();
     }
     
     private void Start()
@@ -53,6 +67,7 @@ public class BallController : MonoBehaviour
         _movementHandler.Initialize(this);
         _boostHandler.Initialize(this, _movementHandler);
         _collisionHandler.Initialize(this, _movementHandler);
+        _ownerHandler.Initialize(this);
     }
     
     private void Update()
@@ -67,6 +82,12 @@ public class BallController : MonoBehaviour
                 Vector3 playerDirection = playerObject.transform.forward;
                 float bounceMultiplier = distanceToBat <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
                 _boostHandler.ApplyBatBoost(playerDirection, bounceMultiplier);
+                
+                // Set BallOwner to "Player" when hit outside of close range (>= 1 unit)
+                if (distanceToBat > 1f)
+                {
+                    _ownerHandler.SetOwner(BallOwnerType.Player);
+                }
             }
         }
     }
