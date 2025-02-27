@@ -11,6 +11,9 @@ public class BallCollisionHandler : MonoBehaviour
     private ScreenShake _screenShakeEffect;
     public BallMovementHandler _ballMovement;
 
+    [SerializeField] private float _hitStopDuration = 0.03f;
+    [SerializeField] private float _screenShakeStrength = 0.4f;
+
     private void Start()
     {
         mainCamera = GameObject.Find("Main Camera");
@@ -34,10 +37,10 @@ public class BallCollisionHandler : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(_ballMovement.CurrentSpeed >= 40)
+        if (_ballMovement.CurrentSpeed >= 40)
         {
-            StartCoroutine(_hitStopEffect.HitStopCoroutine(0.03f));
-            _screenShakeEffect.StartScreenShake(0.4f);
+            StartCoroutine(_hitStopEffect.HitStopCoroutine(_hitStopDuration));
+            _screenShakeEffect.StartScreenShake(_screenShakeStrength);
         }
 
         if (collision.contacts.Length > 0)
