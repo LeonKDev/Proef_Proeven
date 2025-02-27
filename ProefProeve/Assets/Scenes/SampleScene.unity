@@ -1384,10 +1384,13 @@ MonoBehaviour:
   boostDuration: 3
   batObject: {fileID: 1394806072}
   playerObject: {fileID: 2051630806}
-  normalBounceMultiplier: 2
-  closeRangeBounceMultiplier: 2
+  normalBounceMultiplier: 3
+  closeRangeBounceMultiplier: 1
+  ballOwner: 1
   curveStrength: 0.25
   curveResponse: 2
+  BossRef: {fileID: 2100000, guid: 9ea0ff080492cf54286784723aa47859, type: 2}
+  PlayerRef: {fileID: 2100000, guid: f80691808433219468eff1c060fd0718, type: 2}
 --- !u!1 &2051630806
 GameObject:
   m_ObjectHideFlags: 0

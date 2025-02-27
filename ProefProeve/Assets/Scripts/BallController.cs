@@ -44,7 +44,11 @@ public class BallController : MonoBehaviour
     public float CloseRangeBounceMultiplier => closeRangeBounceMultiplier;
     public float CurveStrength => curveStrength;
     public float CurveResponse => curveResponse;
-    
+
+    // Material ref
+    public Material BossRef;
+    public Material PlayerRef;
+
     // Property for ball owner
     public BallOwnerType BallOwner 
     { 
@@ -72,6 +76,18 @@ public class BallController : MonoBehaviour
     
     private void Update()
     {
+        switch (ballOwner)
+        {
+            case BallOwnerType.Player:
+                // Do Player logic
+                GetComponent<Renderer>().material = PlayerRef;
+                break;
+            case BallOwnerType.Boss:
+                GetComponent<Renderer>().material = BossRef;
+                // Do Boss logic
+                break;
+        }
+
         // Check for bat hit input
         if (Input.GetKeyDown(KeyCode.E) && batObject != null && playerObject != null)
         {
@@ -84,7 +100,7 @@ public class BallController : MonoBehaviour
                 _boostHandler.ApplyBatBoost(playerDirection, bounceMultiplier);
                 
                 // Set BallOwner to "Player" when hit outside of close range (>= 1 unit)
-                if (distanceToBat > 1f)
+                if (distanceToBat > 2f)
                 {
                     _ownerHandler.SetOwner(BallOwnerType.Player);
                 }
