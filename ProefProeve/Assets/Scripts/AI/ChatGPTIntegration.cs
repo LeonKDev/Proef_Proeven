@@ -201,7 +201,7 @@ public class ChatGPTIntegration : MonoBehaviour
         // Check rate limiting
         if (!CanMakeRequest())
         {
-            Debug.LogWarning("Rate limit check failed. Cannot send request at this time.");
+            Debug.LogWarning("Rate limit check failed. Cannot send request at this time!");
             yield break;
         }
         
