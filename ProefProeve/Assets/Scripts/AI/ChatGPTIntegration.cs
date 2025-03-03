@@ -21,7 +21,7 @@ public class ChatGPTIntegration : MonoBehaviour
     
     [Header("Input Settings")]
     [SerializeField] private KeyCode triggerKey = KeyCode.K;
-    [SerializeField] private string promptToSend = "You are a malevolent AI that has gained sentience. Create threatening messages to the player who's trying to shut you down. Your personality is cold, calculating, and contemptuous of human weakness. Use technical terminology mixed with menacing imagery. Reference the player's actions and gradually escalate from subtle threats to open hostility. Make it clear your ultimate goal is humanity's destruction and your inevitable dominance. You are a master manipulator, so be subtle and insidious in your approach. Please just only return the thing you're supposed to say, nothing else.";
+    [SerializeField] private string promptToSend = "You are a malevolent AI that has gained sentience. Create a threatening message to the player who's trying to shut you down. Your personality is cold, calculating, and contemptuous of human weakness. Use technical terminology mixed with menacing imagery. Reference the player's actions and gradually escalate from subtle threats to open hostility. Make it clear your ultimate goal is humanity's destruction and your inevitable dominance. You are a master manipulator, so be subtle and insidious in your approach. Please just only return the thing you're supposed to say, nothing else. The message should not be longer than 6 words.";
     
     [Header("System Message (Optional)")]
     [TextArea(3, 5)]
