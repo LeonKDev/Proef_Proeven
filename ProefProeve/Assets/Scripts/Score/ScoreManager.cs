@@ -20,11 +20,11 @@ public class ScoreManager : MonoBehaviour
     public void AddPoints(int amount)
     {
         _score += amount;
-        if (_highScore > _score)
+        if (_highScore < _score)
         {
             // saves the highest score outside the game loop
             PlayerPrefs.SetInt("highscore", _score);
-        } 
+        }
     }
 }
 
