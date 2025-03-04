@@ -60,12 +60,12 @@ public class BallController : MonoBehaviour
         // Check for bat hit input
         if (Input.GetKeyDown(KeyCode.E) && batObject != null && playerObject != null)
         {
-            float distanceToBat = Vector3.Distance(transform.position, batObject.transform.position);
-            if (distanceToBat <= 4f)
+            float distanceToPlayer = Vector3.Distance(transform.position, playerObject.transform.position);
+            if (distanceToPlayer <= 4f)
             {
                 // Use player's forward direction instead of bat's forward
                 Vector3 playerDirection = playerObject.transform.forward;
-                float bounceMultiplier = distanceToBat <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
+                float bounceMultiplier = distanceToPlayer <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
                 _boostHandler.ApplyBatBoost(playerDirection, bounceMultiplier);
             }
         }
