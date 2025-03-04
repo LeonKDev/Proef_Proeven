@@ -20,8 +20,10 @@ public class BallCollisionHandler : MonoBehaviour
             // Store the last collided GameObject
             _lastCollidedObject = collision.gameObject;
             
+            
             if (_movementHandler.CurrentSpeed > 40f)
             {
+                // calculate point multiplier and add points accordingly
                 var multiplier = _movementHandler.CurrentSpeed / 40;
                 ScoreManager.Instance.AddPoints( (int)Mathf.Round(100 * multiplier));
             }
