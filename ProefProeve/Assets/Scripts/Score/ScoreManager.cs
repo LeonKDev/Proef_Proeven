@@ -36,6 +36,5 @@ public class ScoreManager : MonoBehaviour
         
         // saves the highest score outside the game loop
         PlayerPrefs.SetInt("highscore", _score);
-        
     }
 }
