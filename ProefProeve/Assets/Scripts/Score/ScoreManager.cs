@@ -4,6 +4,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
     
+    // Score storage
     private int _score = 0;
     private int _highScore = 0;
     
