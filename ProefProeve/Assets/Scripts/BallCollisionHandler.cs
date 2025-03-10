@@ -6,6 +6,23 @@ public class BallCollisionHandler : MonoBehaviour
     private BallMovementHandler _movementHandler;
     private GameObject _lastCollidedObject;
 
+    private GameObject mainCamera;
+    private HitStopEffect _hitStopEffect;
+    private ScreenShake _screenShakeEffect;
+    public BallMovementHandler _ballMovement;
+
+    [SerializeField] private float _hitStopDuration = 0.03f;
+    [SerializeField] private float _screenShakeStrength = 0.4f;
+
+    private void Start()
+    {
+        mainCamera = GameObject.Find("Main Camera");
+        _hitStopEffect = mainCamera.GetComponent<HitStopEffect>();
+        _screenShakeEffect = mainCamera.GetComponent<ScreenShake>();
+
+        _ballMovement = this.gameObject.GetComponent<BallMovementHandler>();
+    }
+
     public void Initialize(BallController controller, BallMovementHandler movementHandler)
     {
         _controller = controller;
@@ -15,6 +32,12 @@ public class BallCollisionHandler : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (_ballMovement.CurrentSpeed >= 40)
+        {
+            StartCoroutine(_hitStopEffect.HitStopCoroutine(_hitStopDuration));
+            _screenShakeEffect.StartScreenShake(_screenShakeStrength);
+        }
+
         if (collision.contacts.Length > 0)
         {
             // Store the last collided GameObject
