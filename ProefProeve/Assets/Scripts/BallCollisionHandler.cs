@@ -5,6 +5,7 @@ public class BallCollisionHandler : MonoBehaviour
     private BallController _controller;
     private BallMovementHandler _movementHandler;
     private GameObject _lastCollidedObject;
+    
 
     public void Initialize(BallController controller, BallMovementHandler movementHandler)
     {
@@ -20,12 +21,14 @@ public class BallCollisionHandler : MonoBehaviour
             // Store the last collided GameObject
             _lastCollidedObject = collision.gameObject;
             
-            
             if (_movementHandler.CurrentSpeed > 40f)
             {
                 // calculate point multiplier and add points accordingly
                 var multiplier = _movementHandler.CurrentSpeed / 40;
-                ScoreManager.Instance.AddPoints( (int)Mathf.Round(100 * multiplier));
+                var pointsToAdd = (int)Mathf.Round(100 * multiplier);
+                ScoreManager.Instance.AddPoints(pointsToAdd);
+                
+                ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
             }
             
             // Reflect the current direction based on collision normal

@@ -450,8 +450,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd4ede5a169af804697740481437c7a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreText: {fileID: 42593445}
-  HighscoreText: {fileID: 1125691830}
+  scoreText: {fileID: 42593445}
+  highscoreText: {fileID: 1125691830}
+  collisionHitPefab: {fileID: 562049070555580765, guid: c08f528f228d2d44e9ff0721da66873d,
+    type: 3}
 --- !u!4 &300593587
 Transform:
   m_ObjectHideFlags: 0
