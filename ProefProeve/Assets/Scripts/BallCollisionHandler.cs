@@ -24,8 +24,8 @@ public class BallCollisionHandler : MonoBehaviour
             if (_movementHandler.CurrentSpeed > 40f)
             {
                 // calculate point multiplier and add points accordingly
-                var multiplier = _movementHandler.CurrentSpeed / 40;
-                var pointsToAdd = (int)Mathf.Round(100 * multiplier);
+                float multiplier = _movementHandler.CurrentSpeed / 40;
+                int pointsToAdd = (int)Mathf.Round(100 * multiplier);
                 ScoreManager.Instance.AddPoints(pointsToAdd);
                 
                 ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);

@@ -39,7 +39,6 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public void AddPoints(int amount)
     {
-        
         Score += amount;
         scoreText.text = Score.ToString("00000");
         
@@ -48,16 +47,13 @@ public class ScoreManager : MonoBehaviour
         
         // saves the highest score outside the game loop
         PlayerPrefs.SetInt("highscore", Score);
-        
     }
-
     public void InstantiateScoreObject(Collision col, int pointsOnHit)
     {
         ContactPoint contact = col.GetContact(0);
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
         
-        var pointObjectClone = Instantiate(collisionHitPefab, new Vector3(pos.x, 3 ,pos.z),Quaternion.Euler(90,0,-90));
+        Canvas pointObjectClone = Instantiate(collisionHitPefab, new Vector3(pos.x, 3 ,pos.z),Quaternion.Euler(90,0,-90));
         pointObjectClone.GetComponentInChildren<TextMeshProUGUI>().text = pointsOnHit.ToString();
     }
 }
