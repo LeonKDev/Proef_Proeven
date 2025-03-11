@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class StaggeredState : State
 {
+    [SerializeField] private float staggerTime;
     protected StateMachine _stateMachine;
+    private BossStats _bossStats;
+    
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
+        _bossStats = GetComponent<BossStats>();
     }
 
     public override void Enter()
@@ -25,5 +29,11 @@ public class StaggeredState : State
     public override void Tick()
     {
         base.Tick();
+        staggerTime -= Time.deltaTime;
+
+        if (staggerTime <= 0.0f)
+        {
+            _stateMachine.ChangeState<IdleState>();
+        }
     }
 }
