@@ -527,6 +527,70 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &541759572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 541759574}
+  - component: {fileID: 541759573}
+  m_Layer: 0
+  m_Name: Music Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &541759573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541759572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f23b132287758842a86c95565b26679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuMusic:
+    trackName: 
+    clip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
+    volume: 1
+    loop: 1
+    introClip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
+  gameplayMusic:
+    trackName: 
+    clip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
+    volume: 1
+    loop: 1
+    introClip: {fileID: 0}
+  bossMusic:
+    trackName: 
+    clip: {fileID: 8300000, guid: 02b8cd81757251747827a9985ee8645a, type: 3}
+    volume: 1
+    loop: 1
+    introClip: {fileID: 8300000, guid: 02b8cd81757251747827a9985ee8645a, type: 3}
+  crossFadeDuration: 1.5
+  bossTransitionTime: 100
+--- !u!4 &541759574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541759572}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12681022, y: 7.4121056, z: 0.06460277}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &605112373
 GameObject:
   m_ObjectHideFlags: 0
@@ -7040,3 +7104,4 @@ SceneRoots:
   - {fileID: 1966734847}
   - {fileID: 605112375}
   - {fileID: 820558306}
+  - {fileID: 541759574}
