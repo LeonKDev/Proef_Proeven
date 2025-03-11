@@ -38,10 +38,27 @@ public class BallCollisionHandler : MonoBehaviour
             _screenShakeEffect.StartScreenShake(_screenShakeStrength);
         }
 
+        // Reset perfect hit state whenever the ball collides with anything
+        if (_controller != null)
+        {
+            _controller.ResetPerfectHitState();
+        }
+
         if (collision.contacts.Length > 0)
         {
             // Store the last collided GameObject
             _lastCollidedObject = collision.gameObject;
+            
+            if (_movementHandler.CurrentSpeed > 40f)
+            {
+                // calculate point multiplier and add points accordingly
+                float multiplier = _movementHandler.CurrentSpeed / 40;
+                int pointsToAdd = (int)Mathf.Round(100 * multiplier);
+                ScoreManager.Instance.AddPoints(pointsToAdd);
+                
+                // instantiates the score object at the current collision point
+                ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
+            }
             
             // Reflect the current direction based on collision normal
             Vector3 normal = collision.contacts[0].normal;
@@ -54,6 +71,12 @@ public class BallCollisionHandler : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
+        // Reset perfect hit state on trigger events as well
+        if (_controller != null)
+        {
+            _controller.ResetPerfectHitState();
+        }
+        
         // Store last triggered GameObject
         _lastCollidedObject = other.gameObject;
     }
