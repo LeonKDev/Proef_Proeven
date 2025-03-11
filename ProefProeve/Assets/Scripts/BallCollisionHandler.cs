@@ -43,6 +43,17 @@ public class BallCollisionHandler : MonoBehaviour
             // Store the last collided GameObject
             _lastCollidedObject = collision.gameObject;
             
+            if (_movementHandler.CurrentSpeed > 40f)
+            {
+                // calculate point multiplier and add points accordingly
+                float multiplier = _movementHandler.CurrentSpeed / 40;
+                int pointsToAdd = (int)Mathf.Round(100 * multiplier);
+                ScoreManager.Instance.AddPoints(pointsToAdd);
+                
+                // instantiates the score object at the current collision point
+                ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
+            }
+            
             // Reflect the current direction based on collision normal
             Vector3 normal = collision.contacts[0].normal;
             Vector3 reflectedDirection = Vector3.Reflect(_movementHandler.Direction, normal);
