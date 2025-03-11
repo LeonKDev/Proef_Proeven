@@ -33,12 +33,6 @@ public class BallOwnerHandler : MonoBehaviour
                 SetOwner(BallOwnerType.Boss);
             }
         }
-
-        // Ensure the BallController's ownership value is kept in sync
-        if (_ballController != null)
-        {
-            _ballController.BallOwner = _currentOwner;
-        }
     }
 
     /// <summary>
@@ -52,12 +46,6 @@ public class BallOwnerHandler : MonoBehaviour
         if (owner == BallOwnerType.Player)
         {
             _lastPlayerInteractionTime = Time.time;
-        }
-
-        // Ensure the BallController's ownership value is updated
-        if (_ballController != null)
-        {
-            _ballController.BallOwner = _currentOwner;
         }
     }
 

@@ -12,12 +12,7 @@ public class ChatGPTIntegration : MonoBehaviour
     [SerializeField] private string model = "gpt-4o-mini";
     [SerializeField] private string endpoint = "https://api.openai.com/v1/chat/completions";
     [SerializeField] private float temperature = 0.7f;
-    [SerializeField] private int maxTokens = 150;
-
-    [Header("Rate Limiting")]
-    [SerializeField] private bool enableRateLimiting = true;
-    [SerializeField] private float minimumTimeBetweenRequests = 5f; // 5 seconds between requests
-    [SerializeField] private int maxRequestsPerMinute = 3;
+    [SerializeField] private int maxTokens = 300;
     
     [Header("Input Settings")]
     [SerializeField] private KeyCode triggerKey = KeyCode.K;
@@ -30,15 +25,9 @@ public class ChatGPTIntegration : MonoBehaviour
     private List<Message> conversationHistory = new List<Message>();
     private string lastResponse = "";
     private bool isProcessing = false;
-    
-    // Rate limiting variables
-    private float lastRequestTime = 0f;
-    private Queue<float> requestTimestamps = new Queue<float>();
 
     // Event that fires when a response is received
     public event Action<string> OnResponseReceived;
-    // Event that fires when a rate limit is hit
-    public event Action OnRateLimitHit;
 
     [System.Serializable]
     private class Message
@@ -82,12 +71,6 @@ public class ChatGPTIntegration : MonoBehaviour
         public Message message;
     }
 
-    private void Awake()
-    {
-        // Get the persistent data if any exists
-        lastRequestTime = PlayerPrefs.GetFloat("LastChatGPTRequestTime", 0f);
-    }
-
     private void Start()
     {
         // Initialize the conversation with a system message if provided
@@ -107,15 +90,8 @@ public class ChatGPTIntegration : MonoBehaviour
         // Check for key press to send prompt
         if (Input.GetKeyDown(triggerKey) && !string.IsNullOrEmpty(promptToSend))
         {
-            if (CanMakeRequest())
-            {
-                Debug.Log($"Key {triggerKey} pressed. Sending prompt to ChatGPT: " + promptToSend);
-                StartCoroutine(SendPromptToChatGPT(promptToSend));
-            }
-            else
-            {
-                Debug.LogWarning($"Key {triggerKey} pressed, but rate limiting prevented the request.");
-            }
+            Debug.Log($"Key {triggerKey} pressed. Sending prompt to ChatGPT: " + promptToSend);
+            StartCoroutine(SendPromptToChatGPT(promptToSend));
         }
     }
 
@@ -123,10 +99,6 @@ public class ChatGPTIntegration : MonoBehaviour
     {
         // Unsubscribe from the event when the object is destroyed
         OnResponseReceived -= HandleResponse;
-        
-        // Save the last request time
-        PlayerPrefs.SetFloat("LastChatGPTRequestTime", lastRequestTime);
-        PlayerPrefs.Save();
     }
 
     /// <summary>
@@ -135,42 +107,6 @@ public class ChatGPTIntegration : MonoBehaviour
     private void HandleResponse(string response)
     {
         Debug.Log("<color=green>ChatGPT Response:</color> " + response);
-    }
-
-    /// <summary>
-    /// Checks if we can make another request based on rate limiting settings
-    /// </summary>
-    /// <returns>True if a request can be made, false otherwise</returns>
-    private bool CanMakeRequest()
-    {
-        if (!enableRateLimiting)
-            return true;
-            
-        float currentTime = Time.time;
-        
-        // Check if minimum time between requests has passed
-        if (currentTime - lastRequestTime < minimumTimeBetweenRequests)
-        {
-            Debug.LogWarning($"Rate limit: Must wait {minimumTimeBetweenRequests - (currentTime - lastRequestTime):F1} more seconds before making another request");
-            if (OnRateLimitHit != null) OnRateLimitHit.Invoke();
-            return false;
-        }
-        
-        // Clean up old timestamps (older than 1 minute)
-        while (requestTimestamps.Count > 0 && currentTime - requestTimestamps.Peek() > 60f)
-        {
-            requestTimestamps.Dequeue();
-        }
-        
-        // Check requests per minute
-        if (requestTimestamps.Count >= maxRequestsPerMinute)
-        {
-            Debug.LogWarning($"Rate limit: Exceeded maximum of {maxRequestsPerMinute} requests per minute. Try again later.");
-            if (OnRateLimitHit != null) OnRateLimitHit.Invoke();
-            return false;
-        }
-        
-        return true;
     }
 
     /// <summary>
@@ -198,19 +134,7 @@ public class ChatGPTIntegration : MonoBehaviour
             yield break;
         }
         
-        // Check rate limiting
-        if (!CanMakeRequest())
-        {
-            Debug.LogWarning("Rate limit check failed. Cannot send request at this time!");
-            yield break;
-        }
-        
         isProcessing = true;
-        
-        // Record this request for rate limiting
-        lastRequestTime = Time.time;
-        requestTimestamps.Enqueue(lastRequestTime);
-        PlayerPrefs.SetFloat("LastChatGPTRequestTime", lastRequestTime);
         
         // Add user message to history
         conversationHistory.Add(new Message("user", prompt));
