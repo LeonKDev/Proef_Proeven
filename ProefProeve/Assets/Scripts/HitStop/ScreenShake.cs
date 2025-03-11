@@ -50,7 +50,7 @@ public class ScreenShake : MonoBehaviour
         //while elapsed time is less than duration the screen will shake based on the intensity of the curve
         while(elapsedTime < duration)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
 
             /*curve should be changed based on type of collision*/
             float strength = curve.Evaluate(elapsedTime / duration);
