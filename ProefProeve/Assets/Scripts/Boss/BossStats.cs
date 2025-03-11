@@ -5,7 +5,7 @@ using UnityEngine;
 public class BossStats : MonoBehaviour
 {
     [SerializeField] private int _health;
-    private bool _hasBall;
+    private bool _hasBall = true;
 
     public bool HasBall
     {

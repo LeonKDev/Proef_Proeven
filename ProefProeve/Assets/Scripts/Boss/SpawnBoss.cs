@@ -7,12 +7,15 @@ public class SpawnBoss : MonoBehaviour
     [SerializeField] private GameObject firstBall;
     [SerializeField] private GameObject bossPrefab;
     [SerializeField] private Transform bossSpawnPoint;
+
+    private bool bossSpawned;
     
     // Update is called once per frame
     void Update()
     {
-        if (ScoreManager.Instance.Score >= SpawnAmount)
+        if (ScoreManager.Instance.Score >= SpawnAmount && !bossSpawned)
         {
+            bossSpawned = true;
             Time.timeScale = 1;
             Destroy(firstBall);
             Instantiate(bossPrefab, bossSpawnPoint);

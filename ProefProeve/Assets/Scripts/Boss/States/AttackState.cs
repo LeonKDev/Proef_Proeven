@@ -6,9 +6,7 @@ public class AttackState : State
     private BossStats _bossStats;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
-
-    private GameObject _currentBall;
-
+    
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
@@ -21,7 +19,8 @@ public class AttackState : State
         Debug.Log("Enter AttackState");
         
         //spawns the ball
-        _currentBall = Instantiate(ballPrefab, ballSpawnPoint);
+        Instantiate(ballPrefab, ballSpawnPoint);
+        _bossStats.HasBall = false;
         _stateMachine.ChangeState<IdleState>();
     }
 
@@ -30,9 +29,12 @@ public class AttackState : State
         base.Exit();
         Debug.Log("Exit AttackState");
     }
-    
-    public override void Tick()
+
+    private void OnCollisionEnter(Collision collision)
     {
-        base.Tick();
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            _stateMachine.ChangeState<StaggeredState>();
+        }
     }
 }
