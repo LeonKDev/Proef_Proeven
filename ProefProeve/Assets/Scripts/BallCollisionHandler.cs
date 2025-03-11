@@ -6,7 +6,6 @@ public class BallCollisionHandler : MonoBehaviour
     private BallMovementHandler _movementHandler;
     private GameObject _lastCollidedObject;
     
-
     public void Initialize(BallController controller, BallMovementHandler movementHandler)
     {
         _controller = controller;
@@ -28,6 +27,7 @@ public class BallCollisionHandler : MonoBehaviour
                 int pointsToAdd = (int)Mathf.Round(100 * multiplier);
                 ScoreManager.Instance.AddPoints(pointsToAdd);
                 
+                // instantiates the score object at the current collision point
                 ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
             }
             
