@@ -567,7 +567,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
     volume: 1
     loop: 1
-    introClip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
+    introClip: {fileID: 0}
   bossMusic:
     trackName: 
     clip: {fileID: 8300000, guid: 02b8cd81757251747827a9985ee8645a, type: 3}
@@ -575,7 +575,7 @@ MonoBehaviour:
     loop: 1
     introClip: {fileID: 8300000, guid: 02b8cd81757251747827a9985ee8645a, type: 3}
   crossFadeDuration: 1.5
-  bossTransitionTime: 20
+  bossTransitionTime: 100
 --- !u!4 &541759574
 Transform:
   m_ObjectHideFlags: 0
