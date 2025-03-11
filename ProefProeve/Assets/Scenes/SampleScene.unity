@@ -6388,7 +6388,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 4
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!135 &1983872741
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6492,9 +6492,13 @@ MonoBehaviour:
   boostDuration: 3
   batObject: {fileID: 1394806072}
   playerObject: {fileID: 2051630806}
+  bossObject: {fileID: 1295692776}
   normalBounceMultiplier: 2
   closeRangeBounceMultiplier: 2
-  ballOwner: 1
+  maxHitDistance: 4
+  perfectHitThreshold: 0.3
+  swingAnimationTrigger: Swing
+  _playerAnimator: {fileID: 2117502759}
   curveStrength: 0.25
   curveResponse: 2
 --- !u!1 &2051630806
@@ -6507,6 +6511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2051630808}
   - component: {fileID: 2051630807}
+  - component: {fileID: 2051630809}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6546,6 +6551,27 @@ Transform:
   - {fileID: 1646958516}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!95 &2051630809
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051630806}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f1bf1cbb7147f694ba7317a386a28e11, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2117502758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5b0d815356edcfb4189dfd31284d1294,

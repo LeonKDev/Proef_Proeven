@@ -38,6 +38,12 @@ public class BallCollisionHandler : MonoBehaviour
             _screenShakeEffect.StartScreenShake(_screenShakeStrength);
         }
 
+        // Reset perfect hit state whenever the ball collides with anything
+        if (_controller != null)
+        {
+            _controller.ResetPerfectHitState();
+        }
+
         if (collision.contacts.Length > 0)
         {
             // Store the last collided GameObject
@@ -54,6 +60,12 @@ public class BallCollisionHandler : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
+        // Reset perfect hit state on trigger events as well
+        if (_controller != null)
+        {
+            _controller.ResetPerfectHitState();
+        }
+        
         // Store last triggered GameObject
         _lastCollidedObject = other.gameObject;
     }
