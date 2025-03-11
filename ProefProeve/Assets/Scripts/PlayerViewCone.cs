@@ -1,70 +1,138 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class VisionCone : MonoBehaviour
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+public class TwoPartVisionCone : MonoBehaviour
 {
-    public Material VisionConeMaterial;
-    public float VisionRange;
-    public float VisionAngle;
-    public LayerMask VisionObstructingLayer;//layer with objects that obstruct the enemy view, like walls, for example
-    public int VisionConeResolution = 120;//the vision cone will be made up of triangles, the higher this value is the pretier the vision cone will be
-    Mesh VisionConeMesh;
-    MeshFilter MeshFilter_;
-    //Create all of these variables, most of them are self explanatory, but for the ones that aren't i've added a comment to clue you in on what they do
-    //for the ones that you dont understand dont worry, just follow along
-    void Start()
-    {
-        transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
-        MeshFilter_ = transform.AddComponent<MeshFilter>();
-        VisionConeMesh = new Mesh();
-        VisionAngle *= Mathf.Deg2Rad;
-    }
+    [Header("Cone Settings")]
+    public float outerRadius = 4f;
+    public float innerRadius = 2f;
+    [Range(3, 100)] public int segments = 30;
+    [Range(1, 180)] public float angle = 60f;
 
+    [Header("Materials")]
+    public Material goodConeMaterial;
+    public Material badConeMaterial;
+
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+
+    private float lastOuterRadius, lastInnerRadius, lastAngle;
+    private int lastSegments;
+
+    void Awake()
+    {
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        GenerateConeMesh();
+        AssignMaterials();
+    }
 
     void Update()
     {
-        DrawVisionCone();//calling the vision cone function everyframe just so the cone is updated every frame
+        if (outerRadius != lastOuterRadius || innerRadius != lastInnerRadius || angle != lastAngle || segments != lastSegments)
+        {
+            GenerateConeMesh();
+            lastOuterRadius = outerRadius;
+            lastInnerRadius = innerRadius;
+            lastAngle = angle;
+            lastSegments = segments;
+        }
     }
 
-    void DrawVisionCone()//this method creates the vision cone mesh
+    void GenerateConeMesh()
     {
-        int[] triangles = new int[(VisionConeResolution - 1) * 3];
-        Vector3[] Vertices = new Vector3[VisionConeResolution + 1];
-        Vertices[0] = Vector3.zero;
-        float Currentangle = -VisionAngle / 2;
-        float angleIcrement = VisionAngle / (VisionConeResolution - 1);
-        float Sine;
-        float Cosine;
+        Mesh mesh = new Mesh();
+        meshFilter.mesh = mesh;
 
-        for (int i = 0; i < VisionConeResolution; i++)
+        int totalVertices = (segments + 1) * 2 + 4; // Frustum + full bad cone
+        Vector3[] vertices = new Vector3[totalVertices];
+
+        int[] goodConeTriangles = new int[segments * 6]; // Good cone (frustum)
+        int[] badConeTriangles = new int[(segments * 3) + 6]; // Bad cone (inner triangle + curved gap)
+
+        float halfAngleRad = Mathf.Deg2Rad * (angle / 2);
+        float gapSize = (outerRadius - innerRadius) * 0.1f; // Small gap adjustment
+
+        // Create frustum vertices (Good Cone)
+        for (int i = 0; i <= segments; i++)
         {
-            Sine = Mathf.Sin(Currentangle);
-            Cosine = Mathf.Cos(Currentangle);
-            Vector3 RaycastDirection = (transform.forward * Cosine) + (transform.right * Sine);
-            Vector3 VertForward = (Vector3.forward * Cosine) + (Vector3.right * Sine);
-            if (Physics.Raycast(transform.position, RaycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
-            {
-                Vertices[i + 1] = VertForward * hit.distance;
-            }
-            else
-            {
-                Vertices[i + 1] = VertForward * VisionRange;
-            }
+            float t = (float)i / segments;
+            float currentAngle = Mathf.Lerp(-halfAngleRad, halfAngleRad, t);
+            float cosA = Mathf.Cos(currentAngle);
+            float sinA = Mathf.Sin(currentAngle);
 
-
-            Currentangle += angleIcrement;
+            // Outer and inner ring
+            vertices[i] = new Vector3(sinA * outerRadius, 0, cosA * outerRadius);
+            vertices[i + segments + 1] = new Vector3(sinA * (innerRadius - gapSize), 0, cosA * (innerRadius - gapSize));
         }
-        for (int i = 0, j = 0; i < triangles.Length; i += 3, j++)
+
+        // Full Bad Cone (inner triangle)
+        Vector3 center = Vector3.zero; // Player position
+        Vector3 tip = new Vector3(0, 0, innerRadius - gapSize); // Adjusted tip
+        Vector3 leftSide = new Vector3(Mathf.Sin(-halfAngleRad) * (innerRadius - gapSize), 0, Mathf.Cos(-halfAngleRad) * (innerRadius - gapSize));
+        Vector3 rightSide = new Vector3(Mathf.Sin(halfAngleRad) * (innerRadius - gapSize), 0, Mathf.Cos(halfAngleRad) * (innerRadius - gapSize));
+
+        vertices[(segments + 1) * 2] = center;
+        vertices[(segments + 1) * 2 + 1] = leftSide;
+        vertices[(segments + 1) * 2 + 2] = rightSide;
+        vertices[(segments + 1) * 2 + 3] = tip;
+
+        // Generate triangles for Good Cone (frustum)
+        int ti = 0;
+        for (int i = 0; i < segments; i++)
         {
-            triangles[i] = 0;
-            triangles[i + 1] = j + 1;
-            triangles[i + 2] = j + 2;
+            int v0 = i;
+            int v1 = i + 1;
+            int v2 = i + segments + 1;
+            int v3 = v2 + 1;
+
+            // First triangle
+            goodConeTriangles[ti++] = v0;
+            goodConeTriangles[ti++] = v1;
+            goodConeTriangles[ti++] = v2;
+
+            // Second triangle
+            goodConeTriangles[ti++] = v2;
+            goodConeTriangles[ti++] = v1;
+            goodConeTriangles[ti++] = v3;
         }
-        VisionConeMesh.Clear();
-        VisionConeMesh.vertices = Vertices;
-        VisionConeMesh.triangles = triangles;
-        MeshFilter_.mesh = VisionConeMesh;
+
+        // Generate Bad Cone (Curved Gap + Inner Triangle)
+        int bi = 0;
+        for (int i = 0; i < segments; i++)
+        {
+            int v0 = i + segments + 1;
+            int v1 = v0 + 1;
+            int v2 = (segments + 1) * 2; // Center point
+
+            badConeTriangles[bi++] = v0;
+            badConeTriangles[bi++] = v1;
+            badConeTriangles[bi++] = v2;
+        }
+
+        // Inner Triangle
+        badConeTriangles[bi++] = (segments + 1) * 2; // Center
+        badConeTriangles[bi++] = (segments + 1) * 2 + 1; // Left side
+        badConeTriangles[bi++] = (segments + 1) * 2 + 3; // Tip
+
+        badConeTriangles[bi++] = (segments + 1) * 2; // Center
+        badConeTriangles[bi++] = (segments + 1) * 2 + 3; // Tip
+        badConeTriangles[bi++] = (segments + 1) * 2 + 2; // Right side
+
+        // Assign to mesh
+        mesh.vertices = vertices;
+        mesh.subMeshCount = 2;
+        mesh.SetTriangles(goodConeTriangles, 0); // Good Cone (Outer Frustum)
+        mesh.SetTriangles(badConeTriangles, 1); // Full Bad Cone (Triangle + Gap)
+        mesh.RecalculateNormals(); // Fix normals
+    }
+
+
+
+
+    void AssignMaterials()
+    {
+        if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.materials = new Material[] { goodConeMaterial, badConeMaterial };
     }
 }
