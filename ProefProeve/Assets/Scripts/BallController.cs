@@ -28,6 +28,7 @@ public class BallController : MonoBehaviour
     
     // State tracking
     private bool _isPerfectHit = false;
+    private bool _isHit = false;
     
     // Properties to access settings from other components
     public float BaseSpeed => baseSpeed;
@@ -36,6 +37,7 @@ public class BallController : MonoBehaviour
     public float CurveStrength => curveStrength;
     public float CurveResponse => curveResponse;
     public bool IsPerfectHit => _isPerfectHit;
+    public bool IsHit => _isHit;
     public GameObject PlayerObject => playerObject;
     public GameObject BossObject => bossObject;
 

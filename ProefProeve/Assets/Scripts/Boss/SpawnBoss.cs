@@ -5,7 +5,7 @@ public class SpawnBoss : MonoBehaviour
 {
     [SerializeField] private int SpawnAmount;
     [SerializeField] private GameObject firstBall;
-    [SerializeField] private GameObject bossPrefab;
+    [SerializeField] private GameObject boss;
     [SerializeField] private Transform bossSpawnPoint;
 
     private bool bossSpawned;
@@ -18,7 +18,7 @@ public class SpawnBoss : MonoBehaviour
             bossSpawned = true;
             Time.timeScale = 1;
             Destroy(firstBall);
-            Instantiate(bossPrefab, bossSpawnPoint);
+            Instantiate(boss, bossSpawnPoint);
         }
     }
 }
