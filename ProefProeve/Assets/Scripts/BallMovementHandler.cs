@@ -66,8 +66,19 @@ public class BallMovementHandler : MonoBehaviour
 
     private void ApplyCurving()
     {
-        // Use the player object for curving if available, otherwise fall back to the bat
-        GameObject targetObject = _controller.PlayerObject != null ? _controller.PlayerObject : _controller.BatObject;
+        // Determine which object to curve towards based on perfect hit state
+        GameObject targetObject;
+        
+        if (_controller.IsPerfectHit && _controller.BossObject != null)
+        {
+            // If perfect hit, curve toward the boss
+            targetObject = _controller.BossObject;
+        }
+        else
+        {
+            // Otherwise use the player object for curving if available, or fall back to the bat
+            targetObject = _controller.PlayerObject != null ? _controller.PlayerObject : _controller.BatObject;
+        }
         
         if (targetObject != null)
         {
@@ -76,6 +87,12 @@ public class BallMovementHandler : MonoBehaviour
             // Reduce curve effect when currentSpeed is higher than baseSpeed
             float effectiveCurve = (_controller.CurveStrength * _controller.CurveResponse * Time.fixedDeltaTime) * 
                                   (_controller.BaseSpeed / _currentSpeed);
+            
+            // If it's a perfect hit, increase the curve strength to ensure it targets the boss more aggressively
+            if (_controller.IsPerfectHit && targetObject == _controller.BossObject)
+            {
+                effectiveCurve *= 2f; // Double the curve effect for perfect hits
+            }
             
             Vector3 newDir = Vector3.Slerp(_rb.velocity.normalized, toTarget, effectiveCurve).normalized;
             _rb.velocity = newDir * _currentSpeed;
