@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class AttackState : State
 {
-    protected StateMachine _stateMachine;
+    protected StateMachine StateMachine;
     private BossStats _bossStats;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
     public GameObject test;
     private void Awake()
     {
-        _stateMachine = GetComponent<StateMachine>();
+        StateMachine = GetComponent<StateMachine>();
         _bossStats = GetComponent<BossStats>();
     }
 
@@ -20,9 +20,9 @@ public class AttackState : State
         test.GetComponent<Renderer>().material.color = Color.red;
         
         //spawns the ball
-        Instantiate(ballPrefab, ballSpawnPoint, true);
+        Instantiate(ballPrefab, ballSpawnPoint);
         _bossStats.HasBall = false;
-        _stateMachine.ChangeState<IdleState>();
+        StateMachine.ChangeState<IdleState>();
     }
 
     public override void Exit()
@@ -35,7 +35,7 @@ public class AttackState : State
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
-            _stateMachine.ChangeState<StaggeredState>();
+            StateMachine.ChangeState<StaggeredState>();
         }
     }
 }

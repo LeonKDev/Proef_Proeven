@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     [Header("Health Settings")]
     [SerializeField] private int _health;
     [SerializeField] private float damageBreakTimer = 3;
+    [SerializeField] private Color colorOnDamage;
     private float oldDamageBreakTimer;
     
     [Header("Health References")]
@@ -72,11 +73,11 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("flash");
         var material = renderer.material;
-        material.color = Color.red;     
+        material.color = colorOnDamage;     
         yield return new WaitForSeconds(0.5f); 
         material.color = Color.white;     
-        yield return new WaitForSeconds(0.5f); 
-        material.color = Color.red;     
+        yield return new WaitForSeconds(0.5f);
+        material.color = colorOnDamage;     
         yield return new WaitForSeconds(0.5f); 
         material.color = Color.white;     
         yield return new WaitForSeconds(0.5f);
