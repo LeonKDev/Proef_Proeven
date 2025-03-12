@@ -82,11 +82,6 @@ public class BallController : MonoBehaviour
                 Debug.LogWarning("Player object does not have an Animator component");
             }
         }
-
-        if (batObject == null)
-        {
-            
-        }
     }
     
     private void Update()

@@ -1,56 +1,66 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerData : MonoBehaviour
 {
-    private bool coroutineCalled = false;
-    private bool damagebreak;
-    private bool colorchange;
-    [SerializeField] private float DamageBreakTimer = 3;
-        
-    //todo; check if health works 
     public static PlayerData Instance;
+    
+    [Header("Health Settings")]
     [SerializeField] private int _health;
+    [SerializeField] private float damageBreakTimer = 3;
+    private float oldDamageBreakTimer;
+    
+    [Header("Health References")]
     [SerializeField] private Renderer renderer;
-    private Color _color;
+    
+    private bool _damageBreak;
+    private bool _colorChange;
     public int Health
     {
         get => _health;
         set => _health = value;
     }
-    
+
+    private void Start()
+    {
+        oldDamageBreakTimer = damageBreakTimer;
+    }
+
     private void Awake()
     {
         Instance = this;
     }
 
-    private void Start()
+    private void Update()
     {
-        _color = renderer.material.color;
+        if (!_damageBreak)
+            return;
+        
+        
+        damageBreakTimer -= Time.deltaTime;
+        
+        if (damageBreakTimer <= 0)
+        {
+            _damageBreak = false;
+            damageBreakTimer = oldDamageBreakTimer;
+        }
     }
-    
+
     public void DamagePlayer(int damageAmount)
     {
-        if (damagebreak)
+        if (_damageBreak)
             return;
         
         Health -= damageAmount;
-        damagebreak = true;
+        _damageBreak = true;
         
         if (Health <= 0)
         {
             Death();
         }
         
-        DamageBreakTimer -= Time.deltaTime;
-        StartCoroutine(HitFlash());
-        if (DamageBreakTimer <= 0)
-        {
-            damagebreak = false;
-        }
+        StartCoroutine(HitFlash()); ;
     }
 
     private void Death()
@@ -61,13 +71,14 @@ public class PlayerData : MonoBehaviour
     public IEnumerator HitFlash()
     {
         Debug.Log("flash");
-        _color = Color.red;     
+        var material = renderer.material;
+        material.color = Color.red;     
         yield return new WaitForSeconds(0.5f); 
-        _color = Color.white;     
+        material.color = Color.white;     
         yield return new WaitForSeconds(0.5f); 
-        _color = Color.red;     
+        material.color = Color.red;     
         yield return new WaitForSeconds(0.5f); 
-        _color = Color.white;     
+        material.color = Color.white;     
         yield return new WaitForSeconds(0.5f);
     }
 }
