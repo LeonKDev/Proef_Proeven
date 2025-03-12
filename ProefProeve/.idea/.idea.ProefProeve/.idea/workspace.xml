@@ -3,14 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8dee900f-d847-4f0e-a608-4d1a32f39781" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Ball.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Ball.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Ball.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Ball.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Boss/Boss.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Boss/Boss.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testing/Boss_Behaviour.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testing/Boss_Behaviour.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testing/Boss_Behaviour.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testing/Boss_Behaviour.unity.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BallController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BallController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/SpawnBoss.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/SpawnBoss.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

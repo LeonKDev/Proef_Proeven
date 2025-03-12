@@ -18,7 +18,8 @@ public class SpawnBoss : MonoBehaviour
             bossSpawned = true;
             Time.timeScale = 1;
             Destroy(firstBall);
-            Instantiate(boss, bossSpawnPoint);
+            boss.gameObject.transform.position = bossSpawnPoint.transform.position;
+            boss.SetActive(true);
         }
     }
 }

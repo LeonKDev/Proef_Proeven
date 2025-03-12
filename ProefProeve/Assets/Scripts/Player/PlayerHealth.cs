@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
-    public static PlayerData Instance;
+    public static PlayerHealth Instance;
     
     [Header("Health Settings")]
     [SerializeField] private int _health;
