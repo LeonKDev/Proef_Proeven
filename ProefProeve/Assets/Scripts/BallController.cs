@@ -39,6 +39,7 @@ public class BallController : MonoBehaviour
     
     // State tracking
     private bool _isPerfectHit = false;
+    private bool _isHit = false;
     
     // Properties to access settings from other components
     public float BaseSpeed => baseSpeed;
@@ -52,6 +53,7 @@ public class BallController : MonoBehaviour
     public float CurveStrength => curveStrength;
     public float CurveResponse => curveResponse;
     public bool IsPerfectHit => _isPerfectHit;
+    public bool IsHit => _isHit;
 
     private void Awake()
     {
@@ -67,7 +69,11 @@ public class BallController : MonoBehaviour
         _movementHandler.Initialize(this);
         _boostHandler.Initialize(this, _movementHandler);
         _collisionHandler.Initialize(this, _movementHandler);
-        
+
+        if (playerObject == null)
+        {
+            playerObject = PlayerData.Instance.gameObject;
+        }
         // Get the player's animator component if player object exists
         if (playerObject != null)
         {
@@ -75,6 +81,11 @@ public class BallController : MonoBehaviour
             {
                 Debug.LogWarning("Player object does not have an Animator component");
             }
+        }
+
+        if (batObject == null)
+        {
+            
         }
     }
     
@@ -104,6 +115,7 @@ public class BallController : MonoBehaviour
                     directionToUse = (bossObject.transform.position - transform.position).normalized;
                     bounceMultiplier = normalBounceMultiplier * 1.5f; // Extra power for perfect hit
                     _isPerfectHit = true;
+                    _isHit = true;
                     
                     // Visual/audio feedback for perfect hit could go here
                     Debug.Log("Perfect hit! Ball directed toward boss.");
@@ -114,6 +126,7 @@ public class BallController : MonoBehaviour
                     directionToUse = playerObject.transform.forward;
                     bounceMultiplier = distanceToPlayer <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
                     _isPerfectHit = false;
+                    _isHit = true;
                 }
                 
                 _boostHandler.ApplyBatBoost(directionToUse, bounceMultiplier);
@@ -136,5 +149,6 @@ public class BallController : MonoBehaviour
     public void ResetPerfectHitState()
     {
         _isPerfectHit = false;
+        _isHit = false;
     }
 }

@@ -7,6 +7,8 @@ public class IdleState : State
     private BossStats _bossStats;
     [SerializeField] private float attackTime;
 
+    public GameObject test;
+
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
@@ -17,6 +19,7 @@ public class IdleState : State
     {
         base.Enter();
         Debug.Log("enter IdleState");
+        test.GetComponent<Renderer>().material.color = Color.green;
     }
 
     public override void Exit()

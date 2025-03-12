@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dee900f-d847-4f0e-a608-4d1a32f39781" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Player.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerData.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerData.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/BossStats.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/BossStats.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/SpawnBoss.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/SpawnBoss.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Boss/Boss.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Boss/Boss.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BallCollisionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BallCollisionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BallController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BallController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/AttackState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/AttackState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/IdleState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/IdleState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/StaggeredState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/StaggeredState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,9 +22,11 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7de0f9f4a2134c3b921f57cc38c5700f1fe00/83/b9600645/Collision.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c3dca0e61d5249b79ac00f7b2c7a01ef176e00/cc/7dcc038d/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Boss/BossStats.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Boss/SpawnBoss.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Boss/StateMachine.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/PlayerData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Score/DestroyScoreObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Score/ScoreManager.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -92,6 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741679400512</updated>
       <workItem from="1741679404768" duration="3224000" />
+      <workItem from="1741769251308" duration="3801000" />
     </task>
     <servers />
   </component>

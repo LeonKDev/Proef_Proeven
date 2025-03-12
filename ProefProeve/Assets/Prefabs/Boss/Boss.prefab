@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackTime: 5
+  test: {fileID: 697804633004406411}
 --- !u!114 &1804200770101877226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +215,7 @@ MonoBehaviour:
   ballPrefab: {fileID: 1228506792074692563, guid: e1cbb1e8d89c4044e9252f29600d9238,
     type: 3}
   ballSpawnPoint: {fileID: 5665689963910848344}
+  test: {fileID: 697804633004406411}
 --- !u!114 &1909774630139854041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staggerTime: 4
+  test: {fileID: 697804633004406411}
 --- !u!114 &5766519215128876874
 MonoBehaviour:
   m_ObjectHideFlags: 0

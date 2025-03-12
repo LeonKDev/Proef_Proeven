@@ -233,6 +233,12 @@ MonoBehaviour:
   bossPrefab: {fileID: 5575726219972073288, guid: c3714eceea903a04d91821c6bca3261a,
     type: 3}
   bossSpawnPoint: {fileID: 210574339}
+--- !u!137 &244516304 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8153101253863224186, guid: 5b0d815356edcfb4189dfd31284d1294,
+    type: 3}
+  m_PrefabInstance: {fileID: 1541983909}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -6549,6 +6555,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 68122ee69b9c7604694b0d9b4f6def08, type: 2}
+    - target: {fileID: 8513859187771203891, guid: 5b0d815356edcfb4189dfd31284d1294,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6690,11 +6701,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2051630808}
+  - component: {fileID: 2051630811}
   - component: {fileID: 2051630807}
   - component: {fileID: 2051630809}
+  - component: {fileID: 2051630810}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6752,6 +6765,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &2051630810
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051630806}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2051630811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051630806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5868c6a7e72644eaffb4fed7a1a973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 3
+  renderer: {fileID: 244516304}
 --- !u!1 &2117502758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5b0d815356edcfb4189dfd31284d1294,
@@ -6930,6 +6978,11 @@ PrefabInstance:
     - target: {fileID: 1228506792074692563, guid: e1cbb1e8d89c4044e9252f29600d9238,
         type: 3}
       propertyPath: m_Name
+      value: Ball
+      objectReference: {fileID: 0}
+    - target: {fileID: 1228506792074692563, guid: e1cbb1e8d89c4044e9252f29600d9238,
+        type: 3}
+      propertyPath: m_TagString
       value: Ball
       objectReference: {fileID: 0}
     - target: {fileID: 7544653064426330200, guid: e1cbb1e8d89c4044e9252f29600d9238,

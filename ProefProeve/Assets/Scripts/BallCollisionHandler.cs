@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class BallCollisionHandler : MonoBehaviour
+public class 
+    BallCollisionHandler : MonoBehaviour
 {
     private BallController _controller;
     private BallMovementHandler _movementHandler;
@@ -71,6 +72,11 @@ public class BallCollisionHandler : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
+        //check if player has been hit by the ball and failed the bat swing
+        if (other.gameObject.CompareTag("Player") && !_controller.IsHit)
+        {
+            PlayerData.Instance.DamagePlayer(1);
+        }
         // Reset perfect hit state on trigger events as well
         if (_controller != null)
         {

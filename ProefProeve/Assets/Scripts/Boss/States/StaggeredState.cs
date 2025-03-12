@@ -7,7 +7,7 @@ public class StaggeredState : State
     [SerializeField] private float staggerTime;
     protected StateMachine _stateMachine;
     private BossStats _bossStats;
-    
+    public GameObject test;
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
@@ -18,6 +18,7 @@ public class StaggeredState : State
     {
         base.Enter();
         Debug.Log("Enter StaggeredState");
+        test.GetComponent<Renderer>().material.color = Color.yellow;
     }
 
     public override void Exit()

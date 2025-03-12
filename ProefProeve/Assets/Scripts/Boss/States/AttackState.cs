@@ -6,7 +6,7 @@ public class AttackState : State
     private BossStats _bossStats;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
-    
+    public GameObject test;
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
@@ -17,9 +17,10 @@ public class AttackState : State
     {
         base.Enter();
         Debug.Log("Enter AttackState");
+        test.GetComponent<Renderer>().material.color = Color.red;
         
         //spawns the ball
-        Instantiate(ballPrefab, ballSpawnPoint);
+        Instantiate(ballPrefab, ballSpawnPoint, true);
         _bossStats.HasBall = false;
         _stateMachine.ChangeState<IdleState>();
     }
