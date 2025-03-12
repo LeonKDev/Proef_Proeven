@@ -10,7 +10,6 @@ public class
     private GameObject mainCamera;
     private HitStopEffect _hitStopEffect;
     private ScreenShake _screenShakeEffect;
-    public BallMovementHandler _ballMovement;
 
     [SerializeField] private float _hitStopDuration = 0.03f;
     [SerializeField] private float _screenShakeStrength = 0.4f;
@@ -18,10 +17,11 @@ public class
     private void Start()
     {
         mainCamera = GameObject.Find("Main Camera");
-        _hitStopEffect = mainCamera.GetComponent<HitStopEffect>();
-        _screenShakeEffect = mainCamera.GetComponent<ScreenShake>();
-
-        _ballMovement = this.gameObject.GetComponent<BallMovementHandler>();
+        if (mainCamera != null)
+        {
+            _hitStopEffect = mainCamera.GetComponent<HitStopEffect>();
+            _screenShakeEffect = mainCamera.GetComponent<ScreenShake>();
+        }
     }
 
     public void Initialize(BallController controller, BallMovementHandler movementHandler)
@@ -29,11 +29,26 @@ public class
         _controller = controller;
         _movementHandler = movementHandler;
         _lastCollidedObject = null;
+        
+        // Debug message to verify initialization
+        Debug.Log("BallCollisionHandler initialized");
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (_ballMovement.CurrentSpeed >= 40)
+        // Check if movement handler is initialized
+        if (_movementHandler == null)
+        {
+            _movementHandler = GetComponent<BallMovementHandler>();
+            if (_movementHandler == null)
+            {
+                Debug.LogError("BallCollisionHandler: MovementHandler not found");
+                return;
+            }
+        }
+        
+        // Apply visual effects if speed is high enough
+        if (_movementHandler.CurrentSpeed >= 40 && _hitStopEffect != null && _screenShakeEffect != null)
         {
             StartCoroutine(_hitStopEffect.HitStopCoroutine(_hitStopDuration));
             _screenShakeEffect.StartScreenShake(_screenShakeStrength);
@@ -50,16 +65,22 @@ public class
             // Store the last collided GameObject
             _lastCollidedObject = collision.gameObject;
             
+            // Score handling
             if (_movementHandler.CurrentSpeed > 40f)
             {
-                // calculate point multiplier and add points accordingly
+                // Calculate point multiplier and add points accordingly
                 float multiplier = _movementHandler.CurrentSpeed / 40;
                 int pointsToAdd = (int)Mathf.Round(100 * multiplier);
-                ScoreManager.Instance.AddPoints(pointsToAdd);
                 
-                // instantiates the score object at the current collision point
-                ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
+                if (ScoreManager.Instance != null)
+                {
+                    ScoreManager.Instance.AddPoints(pointsToAdd);
+                    ScoreManager.Instance.InstantiateScoreObject(collision, pointsToAdd);
+                }
             }
+            
+            // Debug messages for collision
+            Debug.Log("Ball collision at speed: " + _movementHandler.CurrentSpeed);
             
             // Reflect the current direction based on collision normal
             Vector3 normal = collision.contacts[0].normal;
