@@ -15,8 +15,8 @@ public class BallCollisionHandler : MonoBehaviour
 
     private void Start()
     {
-        mainCamera = GameObject.Find("Main Camera");
-        Debug.Log($"BallCollisionHandler: Main Camera found: {mainCamera != null}");
+        mainCamera = GameObject.Find("CameraContainer");
+        Debug.Log($"BallCollisionHandler: CameraContainer found: {mainCamera != null}");
         
         if (mainCamera != null)
         {
