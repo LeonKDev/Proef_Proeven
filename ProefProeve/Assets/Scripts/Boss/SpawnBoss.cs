@@ -9,6 +9,9 @@ public class SpawnBoss : MonoBehaviour
     [SerializeField] private GameObject firstBall;
     [SerializeField] private GameObject boss;
     [SerializeField] private Transform bossSpawnPoint;
+    
+    [Header("Dialogue System")]
+    [SerializeField] private GameObject bossDialogueSystem;
 
     private bool bossSpawned;
 
@@ -23,6 +26,22 @@ public class SpawnBoss : MonoBehaviour
             Time.timeScale = 1;
             boss.gameObject.transform.position = bossSpawnPoint.transform.position;
             boss.SetActive(true);
+            
+            // Play boss theme music when the boss is spawned
+            if (MusicManager.Instance != null)
+            {
+                MusicManager.Instance.TriggerBossMusicManually();
+            }
+            else
+            {
+                Debug.LogWarning("MusicManager not found in scene. Can't play boss music.");
+            }
+            
+            // Initialize the boss dialogue system
+            if (bossDialogueSystem != null)
+            {
+                bossDialogueSystem.SetActive(true);
+            }
         }
     }
 }
