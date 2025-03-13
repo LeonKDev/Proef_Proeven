@@ -60,7 +60,7 @@ public class BallMovementHandler : MonoBehaviour
     {
         _direction = new Vector3(newDirection.x, 0f, newDirection.z).normalized;
         ApplyVelocity();
-        //Debug.Log("Setting ball direction to: " + _direction + " with speed: " + _currentSpeed);
+        Debug.Log("Setting ball direction to: " + _direction + " with speed: " + _currentSpeed);
     }
 
     public void ApplyVelocity()
