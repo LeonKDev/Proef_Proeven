@@ -25,7 +25,7 @@ public class StaggeredState : State
 
     public override void Enter()
     {
-        _animator.SetTrigger("Staggerd");
+        _animator.SetTrigger("Damage");
         _bossStats.DamageBoss(1);
     }
     

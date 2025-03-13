@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 8396565539001273109}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -11.36}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,8 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6789a14b0326ae343b9e25b5c925f863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnAmount: 2000
+  spawnScore: 0
   firstBall: {fileID: 0}
-  bossPrefab: {fileID: 5575726219972073288, guid: c3714eceea903a04d91821c6bca3261a,
-    type: 3}
+  boss: {fileID: 0}
   bossSpawnPoint: {fileID: 8905941754804930687}

@@ -22,11 +22,6 @@ public class IdleState : State
     {
         _oldAttackWaitTime = currentAttackWaitTime;
     }
-
-    public override void Enter()
-    {
-        _animator.SetTrigger("Idle");
-    }
     
     public override void Tick()
     {
