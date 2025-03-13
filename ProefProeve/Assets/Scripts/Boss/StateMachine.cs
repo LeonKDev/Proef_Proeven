@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
+    // State data
     private State _currentState;
     private bool _inTransition;
     
@@ -22,7 +23,7 @@ public class StateMachine : MonoBehaviour
     }
     
     /// <summary>
-    /// Changes the current state of the boss
+    /// Changes the current state of the boss to the desired state
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public void ChangeState<T>() where T : State
