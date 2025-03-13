@@ -7,20 +7,31 @@ public class BallBoostHandler : MonoBehaviour
     
     private float _boostTimeRemaining;
     private float _initialBoostSpeed;
+    private bool _initialized = false;
 
     public void Initialize(BallController controller, BallMovementHandler movementHandler)
     {
         _controller = controller;
         _movementHandler = movementHandler;
+        _initialized = true;
     }
 
     void FixedUpdate()
     {
-        HandleBoostDecay();
+        if (_initialized)
+        {
+            HandleBoostDecay();
+        }
     }
     
     public void ApplyBatBoost(Vector3 direction, float bounceMultiplier)
     {
+        if (!_initialized || _controller == null || _movementHandler == null)
+        {
+            Debug.LogError("BallBoostHandler: Cannot apply boost - not properly initialized");
+            return;
+        }
+        
         // Apply boost effect on hit
         float boostedSpeed = _controller.BaseSpeed * _controller.BoostMultiplier * bounceMultiplier;
         _initialBoostSpeed = boostedSpeed;
@@ -33,6 +44,11 @@ public class BallBoostHandler : MonoBehaviour
     
     private void HandleBoostDecay()
     {
+        if (!_initialized || _controller == null || _movementHandler == null)
+        {
+            return;
+        }
+        
         if (_boostTimeRemaining > 0)
         {
             _boostTimeRemaining -= Time.fixedDeltaTime;
