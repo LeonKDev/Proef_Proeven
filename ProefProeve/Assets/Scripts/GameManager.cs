@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-<<<<<<< Updated upstream
 using System.Collections.Generic;
-=======
->>>>>>> Stashed changes
 
 /// <summary>
 /// Manages game state and modes
@@ -26,20 +23,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
     // Game state
     public bool isGameActive { get; private set; }
     public bool isTutorialMode { get; private set; } = false;
-=======
-    // Game mode flags
-    public bool isTutorialMode { get; private set; }
->>>>>>> Stashed changes
     
     // Tutorial settings
     [Header("Tutorial Settings")]
     [SerializeField] private float tutorialBallSpeedMultiplier = 0.3f; // Ball moves at 30% speed in tutorial
     
-<<<<<<< Updated upstream
     [Header("Game Elements")]
     [SerializeField] private GameObject playerContainer;
     [SerializeField] private GameObject bossContainer;
@@ -56,8 +47,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string startAnimationTrigger = "StartGame";
     [SerializeField] private string tutorialAnimationTrigger = "StartTutorial";
     
-=======
->>>>>>> Stashed changes
     // Properties
     public float TutorialBallSpeedMultiplier => tutorialBallSpeedMultiplier;
 
@@ -76,7 +65,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
     private void Start()
     {
         // Game should be inactive at start, with only the main menu shown
@@ -321,29 +309,6 @@ public class GameManager : MonoBehaviour
     {
         if (element != null && !additionalGameElements.Contains(element))
             additionalGameElements.Add(element);
-=======
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Any scene-specific initialization can go here
-    }
-    
-    public void StartTutorial()
-    {
-        isTutorialMode = true;
-        SceneManager.LoadScene("SampleScene"); // Load your main game scene in tutorial mode
-    }
-    
-    public void StartGame()
-    {
-        isTutorialMode = false;
-        SceneManager.LoadScene("SampleScene"); // Load your main game scene in normal mode
-    }
-    
-    public void ReturnToMainMenu()
-    {
-        isTutorialMode = false;
-        SceneManager.LoadScene("MainMenu"); // Load your menu scene
->>>>>>> Stashed changes
     }
     
     private void OnDestroy()
