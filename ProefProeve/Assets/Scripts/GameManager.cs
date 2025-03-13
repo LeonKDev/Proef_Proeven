@@ -47,11 +47,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string startAnimationTrigger = "StartGame";
     [SerializeField] private string tutorialAnimationTrigger = "StartTutorial";
     
-    /// <summary>
-    /// There is an animation in progress that we are currently blocking - it needs an instance variable
-    /// to keep track of it. We are not making monobehavior classes static! </summary>
-    private bool animationInProgress = false;
-    
     // Properties
     public float TutorialBallSpeedMultiplier => tutorialBallSpeedMultiplier;
 
@@ -143,7 +138,7 @@ public class GameManager : MonoBehaviour
             }
         }
             
-        // Find UI elements if they're not already assigned (keep existing code)
+        // Find UI elements if they're not already assigned
         if (mainMenuUI == null)
             mainMenuUI = GameObject.FindGameObjectWithTag("MainMenuUI");
             
@@ -169,24 +164,29 @@ public class GameManager : MonoBehaviour
         // Make sure all game elements are found
         FindGameElements();
         
-        // Hide the main menu UI immediately
+        // Set up UI
         if (mainMenuUI != null) mainMenuUI.SetActive(false);
+        if (gameplayUI != null) gameplayUI.SetActive(true);
+        if (tutorialUI != null) tutorialUI.SetActive(false);
         
-        // Enable game elements immediately
+        // Hide cursor during gameplay
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Enable game elements
         EnableGameElements();
+        
+        // Now that everything is set up, mark the game as active
         isGameActive = true;
         
         // Start the animation if available
         if (gameStartAnimator != null)
         {
-            animationInProgress = true;
             gameStartAnimator.gameObject.SetActive(true);
             gameStartAnimator.SetTrigger(startAnimationTrigger);
-            
-            // The animation will call AnimationCompleted() via an Animation Event when done
         }
     }
-    
+
     /// <summary>
     /// Start the game in tutorial mode
     /// </summary>
@@ -197,21 +197,26 @@ public class GameManager : MonoBehaviour
         // Make sure all game elements are found
         FindGameElements();
         
-        // Hide the main menu UI immediately
+        // Set up UI
         if (mainMenuUI != null) mainMenuUI.SetActive(false);
+        if (gameplayUI != null) gameplayUI.SetActive(true);
+        if (tutorialUI != null) tutorialUI.SetActive(true);
         
-        // Enable game elements immediately
+        // Keep cursor visible for tutorial UI
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        // Enable game elements
         EnableGameElements();
+        
+        // Now that everything is set up, mark the game as active
         isGameActive = true;
         
         // Start the animation if available
         if (gameStartAnimator != null)
         {
-            animationInProgress = true;
             gameStartAnimator.gameObject.SetActive(true);
             gameStartAnimator.SetTrigger(tutorialAnimationTrigger);
-            
-            // The animation will call AnimationCompleted() via an Animation Event when done
         }
     }
     
@@ -220,62 +225,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void AnimationCompleted()
     {
-        animationInProgress = false;
+        // Enable gameplay elements
+        EnableGameElements();
         
-        // Make sure all game elements are found
-        FindGameElements();
-        
-        // Now activate the game
-        ActivateGameAfterAnimation();
-        
-        // Hide the animation GameObject if it's still showing
+        // Hide the animation GameObject
         if (gameStartAnimator != null)
         {
             gameStartAnimator.gameObject.SetActive(false);
-        }
-    }
-    
-    /// <summary>
-    /// Activates the game after the animation is complete
-    /// </summary>
-    private void ActivateGameAfterAnimation()
-    {
-        // Debug log to check activation sequence
-        Debug.Log("ActivateGameAfterAnimation called, about to enable game elements");
-        
-        // Only proceed if there's no animation in progress
-        if (!animationInProgress)
-        {
-            // Enable game elements first
-            EnableGameElements();
-            
-            // Then set game as active
-            isGameActive = true;
-            
-            // Set cursor state based on game mode
-            if (isTutorialMode)
-            {
-                // Keep cursor visible in tutorial for UI interaction
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                
-                // Show tutorial UI
-                if (gameplayUI != null) gameplayUI.SetActive(true);
-                if (tutorialUI != null) tutorialUI.SetActive(true);
-            }
-            else
-            {
-                // Hide cursor during normal gameplay
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                
-                // Show gameplay UI
-                if (gameplayUI != null) gameplayUI.SetActive(true);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Attempted to activate game while animation is in progress. Activation postponed until animation completes.");
         }
     }
     
@@ -342,10 +298,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void ShowMainMenu()
     {
-        // Show cursor for menu interaction
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        
         // Show main menu UI and hide other UIs
         if (mainMenuUI != null) mainMenuUI.SetActive(true);
         if (gameplayUI != null) gameplayUI.SetActive(false);
