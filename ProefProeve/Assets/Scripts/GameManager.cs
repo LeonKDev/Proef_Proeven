@@ -341,7 +341,23 @@ public class GameManager : MonoBehaviour
         if (element != null && !additionalGameElements.Contains(element))
             additionalGameElements.Add(element);
     }
-    
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus && isGameActive && !isTutorialMode)
+        {
+            // Hide cursor when game window gains focus during gameplay
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            // Show cursor when window loses focus or in menu/tutorial
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
     private void OnDestroy()
     {
         if (_instance == this)
