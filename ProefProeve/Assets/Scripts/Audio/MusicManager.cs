@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MusicManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class MusicManager : MonoBehaviour
         [Range(0f, 1f)]
         public float volume = 1f;
         public bool loop = true;
-        [Tooltip("For tracks with intro segment")]
+        [Tooltip("Optional intro segment that plays once before the main loop")]
         public AudioClip introClip;
     }
 
@@ -26,28 +27,26 @@ public class MusicManager : MonoBehaviour
     
     [Header("Transition Settings")]
     [SerializeField] private float crossFadeDuration = 1.5f;
-    [SerializeField] private float bossTransitionTime = 60f; // Time in seconds before boss music starts (adjust based on gameplay)
+    [SerializeField] private float bossTransitionTime = 60f;
+    [SerializeField] private bool enableAutoBossTransition = true;
     
-    // Audio sources for crossfading
     private AudioSource _activeSource;
     private AudioSource _inactiveSource;
-    
-    // Game state tracking
-    private enum GameState { Menu, Gameplay, Boss }
     private GameState _currentState = GameState.Menu;
     private bool _gameStarted = false;
     private bool _bossEncountered = false;
     private float _gameplayTimer = 0f;
+    private bool _isPlayingIntro = false;
+    
+    private enum GameState { Menu, Gameplay, Boss }
     
     private void Awake()
     {
-        // Singleton pattern setup
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
             
-            // Create audio sources for crossfading
             _activeSource = gameObject.AddComponent<AudioSource>();
             _inactiveSource = gameObject.AddComponent<AudioSource>();
         }
@@ -57,24 +56,41 @@ public class MusicManager : MonoBehaviour
             return;
         }
         
-        // Add scene load event
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
     
     private void Start()
     {
-        // Start with menu music
         PlayMenuMusic();
+    }
+    
+    private void OnEnable()
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm != null)
+        {
+            gm.OnGameStarted += HandleGameStart;
+            gm.OnReturnToMenu += PlayMenuMusic;
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm != null)
+        {
+            gm.OnGameStarted -= HandleGameStart;
+            gm.OnReturnToMenu -= PlayMenuMusic;
+        }
     }
     
     private void Update()
     {
-        // Track gameplay time for boss music transition
-        if (_gameStarted && !_bossEncountered)
+        // Only check for auto boss transition if enabled
+        if (enableAutoBossTransition && _gameStarted && !_bossEncountered)
         {
             _gameplayTimer += Time.deltaTime;
             
-            // Check if it's time for boss music
             if (_gameplayTimer >= bossTransitionTime)
             {
                 PlayBossMusic();
@@ -85,13 +101,23 @@ public class MusicManager : MonoBehaviour
     
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
+    private void HandleGameStart()
+    {
+        PlayGameplayMusic();
+        _gameStarted = true;
+        _bossEncountered = false;
+        _gameplayTimer = 0f;
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Detect scene changes to adjust music
-        // You may need to modify this logic based on your scene names/indexes
+        // Handle scene-specific music
         if (scene.name == "MainMenu")
         {
             PlayMenuMusic();
@@ -106,9 +132,6 @@ public class MusicManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Switches to menu music with crossfade
-    /// </summary>
     public void PlayMenuMusic()
     {
         if (_currentState != GameState.Menu && menuMusic.clip != null)
@@ -118,9 +141,6 @@ public class MusicManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Switches to gameplay music with crossfade, handles intro if available
-    /// </summary>
     public void PlayGameplayMusic()
     {
         if (_currentState != GameState.Gameplay && gameplayMusic.clip != null)
@@ -137,9 +157,6 @@ public class MusicManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Switches to boss music with crossfade, handles intro if available
-    /// </summary>
     public void PlayBossMusic()
     {
         if (_currentState != GameState.Boss && bossMusic.clip != null)
@@ -156,32 +173,30 @@ public class MusicManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Manually trigger boss music (can be called from boss encounter scripts)
-    /// </summary>
     public void TriggerBossMusicManually()
     {
         PlayBossMusic();
         _bossEncountered = true;
     }
     
-    /// <summary>
-    /// Handles crossfading between music tracks
-    /// </summary>
     private IEnumerator CrossFadeMusic(AudioClip newClip, float volume, bool loop)
     {
-        // Swap sources so active becomes inactive and vice versa
+        if (_isPlayingIntro)
+        {
+            // Wait for intro to finish if one is playing
+            yield return new WaitUntil(() => !_isPlayingIntro);
+        }
+
+        // Swap sources
         AudioSource temp = _activeSource;
         _activeSource = _inactiveSource;
         _inactiveSource = temp;
         
-        // Set up new clip
         _activeSource.clip = newClip;
         _activeSource.loop = loop;
         _activeSource.volume = 0;
         _activeSource.Play();
         
-        // Fade out old music while fading in new music
         float timeElapsed = 0;
         
         while (timeElapsed < crossFadeDuration)
@@ -199,67 +214,32 @@ public class MusicManager : MonoBehaviour
             yield return null;
         }
         
-        // Ensure final volumes are set correctly
         _activeSource.volume = volume;
-        
-        // Stop the old music
-        _inactiveSource.Stop();
-        _inactiveSource.clip = null;
-    }
-    
-    /// <summary>
-    /// Plays an intro segment and then transitions to the looping main track
-    /// </summary>
-    private IEnumerator PlayMusicWithIntro(AudioClip introClip, AudioClip loopClip, float volume)
-    {
-        // Fade out any currently playing music
-        if (_activeSource.isPlaying)
-        {
-            StartCoroutine(FadeOut(_activeSource, crossFadeDuration));
-        }
         
         if (_inactiveSource.isPlaying)
         {
-            StartCoroutine(FadeOut(_inactiveSource, crossFadeDuration));
+            _inactiveSource.Stop();
+            _inactiveSource.clip = null;
         }
-        
-        // Wait for fade out
-        yield return new WaitForSeconds(crossFadeDuration);
-        
-        // Play intro
+    }
+    
+    private IEnumerator PlayMusicWithIntro(AudioClip introClip, AudioClip loopClip, float volume)
+    {
+        _isPlayingIntro = true;
+
+        // Start with the intro
         _activeSource.clip = introClip;
         _activeSource.loop = false;
         _activeSource.volume = volume;
         _activeSource.Play();
+
+        // Wait for the intro to complete
+        float introDuration = introClip.length;
+        yield return new WaitForSeconds(introDuration);
+
+        _isPlayingIntro = false;
         
-        // Wait for intro to finish
-        while (_activeSource.isPlaying)
-        {
-            yield return null;
-        }
-        
-        // Transition to looping part
-        _activeSource.clip = loopClip;
-        _activeSource.loop = true;
-        _activeSource.volume = volume;
-        _activeSource.Play();
-    }
-    
-    /// <summary>
-    /// Helper method to fade out an audio source
-    /// </summary>
-    private IEnumerator FadeOut(AudioSource source, float duration)
-    {
-        float startVolume = source.volume;
-        float timeElapsed = 0;
-        
-        while (timeElapsed < duration)
-        {
-            source.volume = Mathf.Lerp(startVolume, 0, timeElapsed / duration);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        
-        source.Stop();
+        // Transition to the main loop
+        StartCoroutine(CrossFadeMusic(loopClip, volume, true));
     }
 }

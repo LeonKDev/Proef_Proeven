@@ -11239,6 +11239,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 229167102}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &816206821 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ac5f878180f44c44093a86ed9318a29a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1954106186}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -41467,6 +41473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1509475826}
+  - component: {fileID: 1509475827}
   m_Layer: 0
   m_Name: BossContainer
   m_TagString: BossContainer
@@ -41490,6 +41497,27 @@ Transform:
   - {fileID: 663971003}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1509475827
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509475825}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1a1d734cb7f583f4a846866a8c2dac16, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1510167085
 GameObject:
   m_ObjectHideFlags: 0
@@ -47238,7 +47266,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ac5f878180f44c44093a86ed9318a29a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5615644210155649231}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac5f878180f44c44093a86ed9318a29a, type: 3}
 --- !u!1 &1983872738
@@ -47425,10 +47457,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuMusic:
     trackName: 
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: d7ef1c178ea1462498f5b1446b5a106f, type: 3}
     volume: 1
     loop: 1
-    introClip: {fileID: 0}
+    introClip: {fileID: 8300000, guid: 6df1fc1c360ebf7489f05d0c079b2f8c, type: 3}
   gameplayMusic:
     trackName: 
     clip: {fileID: 8300000, guid: 4a0579e765c3eff43adc8a03ccb16183, type: 3}
@@ -47442,7 +47474,8 @@ MonoBehaviour:
     loop: 1
     introClip: {fileID: 0}
   crossFadeDuration: 1.5
-  bossTransitionTime: 1
+  bossTransitionTime: 100
+  enableAutoBossTransition: 0
 --- !u!4 &2040048253
 Transform:
   m_ObjectHideFlags: 0
@@ -52527,13 +52560,39 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1541983909}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &1838781092812993698
+--- !u!1 &186809096166412036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5615644210155649231}
+  - component: {fileID: 2444256285442511899}
+  - component: {fileID: 2735592615891699248}
+  m_Layer: 0
+  m_Name: "Arcade mach\xECne.001"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!33 &2444256285442511899
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186809096166412036}
+  m_Mesh: {fileID: -2833098867089795341, guid: 1d5c909019e434743b29c249f38e5b8d, type: 3}
+--- !u!23 &2735592615891699248
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4532242691009101206}
+  m_GameObject: {fileID: 186809096166412036}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -52569,47 +52628,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &2132966181150893705
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4532242691009101206}
-  m_Mesh: {fileID: -2833098867089795341, guid: 0ad3f58d6b373b84d99cffffec19eac7, type: 3}
---- !u!1 &4532242691009101206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8186605084129675869}
-  - component: {fileID: 2132966181150893705}
-  - component: {fileID: 1838781092812993698}
-  m_Layer: 0
-  m_Name: "Arcade mach\xECne.001"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8186605084129675869
+--- !u!4 &5615644210155649231
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4532242691009101206}
+  m_GameObject: {fileID: 186809096166412036}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7044161, y: -0.0616284, z: -0.7044161, w: 0.0616284}
-  m_LocalPosition: {x: 2.0300522, y: -0.77723885, z: -1.7200012}
-  m_LocalScale: {x: 979.45734, y: 1096.4938, z: 1096.4938}
+  m_LocalRotation: {x: -0.52164024, y: -0.47737974, z: 0.52164024, w: -0.47737974}
+  m_LocalPosition: {x: -0.8209874, y: 3.7955952, z: 0}
+  m_LocalScale: {x: 77.401886, y: 8.701271, z: 98.56113}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 816206821}
+  m_LocalEulerAnglesHint: {x: -180, y: 90, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -52622,7 +52655,6 @@ SceneRoots:
   - {fileID: 1314556531}
   - {fileID: 203419670}
   - {fileID: 1510167087}
-  - {fileID: 8186605084129675869}
   - {fileID: 1954106186}
   - {fileID: 1479104534}
   - {fileID: 2040048253}

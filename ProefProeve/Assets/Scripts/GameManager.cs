@@ -1,27 +1,40 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Manages game state and modes
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    // Events for music system
+    public event Action OnGameStarted;
+    public event Action OnReturnToMenu;
+
     // Singleton instance
     private static GameManager _instance;
     public static GameManager Instance
     {
         get
         {
-            if (_instance == null)
+            // Don't create a new instance during cleanup/quit
+            if (_instance == null && !ApplicationQuit)
             {
-                GameObject go = new GameObject("GameManager");
-                _instance = go.AddComponent<GameManager>();
-                DontDestroyOnLoad(go);
+                _instance = FindObjectOfType<GameManager>();
+                
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("GameManager");
+                    _instance = go.AddComponent<GameManager>();
+                    DontDestroyOnLoad(go);
+                }
             }
             return _instance;
         }
     }
+
+    private static bool ApplicationQuit = false;
 
     // Game state
     public bool isGameActive { get; private set; }
@@ -29,7 +42,7 @@ public class GameManager : MonoBehaviour
     
     // Tutorial settings
     [Header("Tutorial Settings")]
-    [SerializeField] private float tutorialBallSpeedMultiplier = 0.3f; // Ball moves at 30% speed in tutorial
+    [SerializeField] private float tutorialBallSpeedMultiplier = 0.3f;
     
     [Header("Game Elements")]
     [SerializeField] private GameObject playerContainer;
@@ -52,7 +65,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern setup
         if (_instance == null)
         {
             _instance = this;
@@ -63,6 +75,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        ApplicationQuit = true;
     }
 
     private void Start()
@@ -95,7 +112,6 @@ public class GameManager : MonoBehaviour
         // Try to find elements by tag first, then by name if tag search fails
         if (playerContainer == null) {
             playerContainer = GameObject.FindGameObjectWithTag("PlayerContainer");
-            // If tag search fails, try by name
             if (playerContainer == null) {
                 GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject obj in allObjects) {
@@ -110,7 +126,6 @@ public class GameManager : MonoBehaviour
             
         if (bossContainer == null) {
             bossContainer = GameObject.FindGameObjectWithTag("BossContainer");
-            // If tag search fails, try by name
             if (bossContainer == null) {
                 GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject obj in allObjects) {
@@ -125,7 +140,6 @@ public class GameManager : MonoBehaviour
             
         if (ballContainer == null) {
             ballContainer = GameObject.FindGameObjectWithTag("BallContainer");
-            // If tag search fails, try by name
             if (ballContainer == null) {
                 GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject obj in allObjects) {
@@ -179,6 +193,9 @@ public class GameManager : MonoBehaviour
         // Now that everything is set up, mark the game as active
         isGameActive = true;
         
+        // Notify listeners that game has started
+        OnGameStarted?.Invoke();
+        
         // Start the animation if available
         if (gameStartAnimator != null)
         {
@@ -211,6 +228,9 @@ public class GameManager : MonoBehaviour
         
         // Now that everything is set up, mark the game as active
         isGameActive = true;
+        
+        // Notify listeners that game has started
+        OnGameStarted?.Invoke();
         
         // Start the animation if available
         if (gameStartAnimator != null)
@@ -252,6 +272,9 @@ public class GameManager : MonoBehaviour
         
         // Show main menu UI
         ShowMainMenu();
+        
+        // Notify listeners we're returning to menu
+        OnReturnToMenu?.Invoke();
     }
     
     /// <summary>
@@ -259,17 +282,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void EnableGameElements()
     {
-        // Debug log to check if containers are being found
-        Debug.Log("Enabling game elements - Player: " + (playerContainer != null) + 
-                  ", Boss: " + (bossContainer != null) + 
-                  ", Ball: " + (ballContainer != null));
-
         if (playerContainer != null) playerContainer.SetActive(true);
         if (bossContainer != null) bossContainer.SetActive(true);
         if (ballContainer != null) ballContainer.SetActive(true);
         
-        // Enable additional game elements
-        foreach (GameObject element in additionalGameElements)
+        foreach (var element in additionalGameElements)
         {
             if (element != null)
                 element.SetActive(true);
@@ -285,8 +302,7 @@ public class GameManager : MonoBehaviour
         if (bossContainer != null) bossContainer.SetActive(false);
         if (ballContainer != null) ballContainer.SetActive(false);
         
-        // Disable additional game elements
-        foreach (GameObject element in additionalGameElements)
+        foreach (var element in additionalGameElements)
         {
             if (element != null)
                 element.SetActive(false);
