@@ -47340,6 +47340,7 @@ GameObject:
   - component: {fileID: 1983872741}
   - component: {fileID: 1983872739}
   - component: {fileID: 1983872745}
+  - component: {fileID: 1983872746}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -47479,6 +47480,25 @@ MonoBehaviour:
   bossObject: {fileID: 663971000}
   curveStrength: 0.25
   curveResponse: 3
+--- !u!114 &1983872746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983872738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfab5c0f637735b40a89b6aa67814bc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sparkPrefabs:
+  - {fileID: 9216033432905779120, guid: eaaeae4070e18ba4cbd8a7917bffc56a, type: 3}
+  - {fileID: 9216033432905779120, guid: 968961fc5eb126c4fa6b2c44ffd5e8ba, type: 3}
+  - {fileID: 9216033432905779120, guid: d84c496e95d13164996fd572b7f5c49c, type: 3}
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 180, z: 0}
+  framesUntilDestroy: 7
 --- !u!1 &2013746529
 GameObject:
   m_ObjectHideFlags: 0
