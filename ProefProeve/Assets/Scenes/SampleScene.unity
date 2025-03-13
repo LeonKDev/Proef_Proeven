@@ -53029,6 +53029,11 @@ PrefabInstance:
       propertyPath: playerObject
       value: 
       objectReference: {fileID: 2051630806}
+    - target: {fileID: 3987188235307287747, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: destroyDelay
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7233185388341455327, guid: 200608a227f129f4db65985148bd5e12,
         type: 3}
       propertyPath: m_LocalPosition.x
