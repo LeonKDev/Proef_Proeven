@@ -46797,8 +46797,8 @@ MonoBehaviour:
   innerRadius: 2
   segments: 30
   angle: 60
-  goodConeMaterial: {fileID: 0}
-  badConeMaterial: {fileID: 0}
+  goodConeMaterial: {fileID: 2100000, guid: 0c72393c2ac20a2468017edeee88fef7, type: 2}
+  badConeMaterial: {fileID: 2100000, guid: 607416f85beed654cb1b73147f1e7d4f, type: 2}
 --- !u!23 &1646958518
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -47477,8 +47477,11 @@ MonoBehaviour:
   boostDuration: 3
   playerObject: {fileID: 2051630806}
   bossObject: {fileID: 663971000}
+  ballOwner: 1
   curveStrength: 0.25
   curveResponse: 3
+  BossRef: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
+  PlayerRef: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
 --- !u!1 &2013746529
 GameObject:
   m_ObjectHideFlags: 0
