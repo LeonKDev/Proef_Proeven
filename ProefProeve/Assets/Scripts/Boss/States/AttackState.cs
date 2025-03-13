@@ -29,7 +29,7 @@ public class AttackState : State
         
         //spawns the ball
         Instantiate(ballPrefab, ballSpawnPoint.transform.position ,Quaternion.Euler(Vector3.forward));
-        _bossStats.HasBall = false;
+        
     }
 
     public override void Tick()
@@ -38,17 +38,6 @@ public class AttackState : State
         if (_bossStats.HasBall == false)
         {
             _stateMachine.ChangeState<IdleState>();
-        }
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Ball"))
-        {
-            Time.timeScale = 1;
-            Destroy(other.gameObject);
-            Time.timeScale = 1;
-            _stateMachine.ChangeState<StaggeredState>();
         }
     }
 }

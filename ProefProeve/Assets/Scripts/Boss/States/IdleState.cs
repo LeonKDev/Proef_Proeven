@@ -36,7 +36,7 @@ public class IdleState : State
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Ball"))
+        if (other.gameObject.CompareTag("Ball") && other.GetComponent<BallController>().IsPerfectHit)
         {
             Time.timeScale = 1;
             Destroy(other.gameObject);

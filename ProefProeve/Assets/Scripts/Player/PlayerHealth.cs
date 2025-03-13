@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -11,8 +11,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float damageBreakTimer = 3;
     [SerializeField] private Color colorOnDamage;
     private float oldDamageBreakTimer;
-    
-    [Header("Health References")]
+
+    [Header("Health References")] 
+    [SerializeField] private Slider HealthUI;
     [SerializeField] private Renderer renderer;
     
     private bool _damageBreak;
@@ -54,6 +55,7 @@ public class PlayerHealth : MonoBehaviour
             return;
         
         Health -= damageAmount;
+        HealthUI.value = Health;
         _damageBreak = true;
         
         if (Health <= 0)
@@ -81,5 +83,12 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.5f); 
         material.color = Color.white;     
         yield return new WaitForSeconds(0.5f);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            DamagePlayer(1);
+        }
     }
 }
