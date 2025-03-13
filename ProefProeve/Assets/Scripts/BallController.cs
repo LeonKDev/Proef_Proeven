@@ -63,16 +63,70 @@ public class BallController : MonoBehaviour
         _boostHandler.Initialize(this, _movementHandler);
         _collisionHandler.Initialize(this, _movementHandler);
         
-        // Register this ball with the BallRegistrationManager
-        BallRegistrationManager.Instance.RegisterBall(this);
+        // Safely register this ball with the BallRegistrationManager
+        SafeRegisterWithManager();
+        
+        // Disable the ball if game is not active
+        CheckGameState();
     }
     
-    private void OnDestroy()
+    private void Update()
     {
-        // Unregister this ball when destroyed
+        // Only process input and movement if game is active
+        if (GameManager.Instance != null && !GameManager.Instance.isGameActive)
+        {
+            return;
+        }
+        
+        // Normal update logic would go here if needed
+    }
+    
+    /// <summary>
+    /// Check game state and disable ball if game is not active
+    /// </summary>
+    private void CheckGameState()
+    {
+        if (GameManager.Instance != null && !GameManager.Instance.isGameActive)
+        {
+            // Disable movement or other components that should only work when game is active
+            if (_movementHandler != null)
+            {
+                _movementHandler.enabled = false;
+            }
+            
+            if (_boostHandler != null)
+            {
+                _boostHandler.enabled = false;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Called by GameManager when game starts
+    /// </summary>
+    public void OnGameStart()
+    {
+        if (_movementHandler != null)
+        {
+            _movementHandler.enabled = true;
+        }
+        
+        if (_boostHandler != null)
+        {
+            _boostHandler.enabled = true;
+        }
+    }
+    
+    /// <summary>
+    /// Safely registers this ball with the BallRegistrationManager
+    /// Creates the manager if it doesn't exist
+    /// </summary>
+    private void SafeRegisterWithManager()
+    {
+        // Safely register this ball with the BallRegistrationManager
         if (BallRegistrationManager.Instance != null)
         {
-            BallRegistrationManager.Instance.UnregisterBall(this);
+            BallRegistrationManager.Instance.RegisterBall(this);
         }
     }
     

@@ -16,10 +16,13 @@ public class BallCollisionHandler : MonoBehaviour
     private void Start()
     {
         mainCamera = GameObject.Find("Main Camera");
+        Debug.Log($"BallCollisionHandler: Main Camera found: {mainCamera != null}");
+        
         if (mainCamera != null)
         {
             _hitStopEffect = mainCamera.GetComponent<HitStopEffect>();
             _screenShakeEffect = mainCamera.GetComponent<ScreenShake>();
+            Debug.Log($"BallCollisionHandler: HitStop component found: {_hitStopEffect != null}, ScreenShake component found: {_screenShakeEffect != null}");
         }
     }
 
@@ -46,11 +49,23 @@ public class BallCollisionHandler : MonoBehaviour
             }
         }
         
+        // Debug log for speed check
+        Debug.Log($"Ball collision speed: {_movementHandler.CurrentSpeed}");
+        
         // Apply visual effects if speed is high enough
-        if (_movementHandler.CurrentSpeed >= 40 && _hitStopEffect != null && _screenShakeEffect != null)
+        if (_movementHandler.CurrentSpeed >= 40)
         {
-            StartCoroutine(_hitStopEffect.HitStopCoroutine(_hitStopDuration));
-            _screenShakeEffect.StartScreenShake(_screenShakeStrength);
+            Debug.Log("Speed threshold met for effects");
+            if (_hitStopEffect != null && _screenShakeEffect != null)
+            {
+                Debug.Log("Triggering screen effects");
+                StartCoroutine(_hitStopEffect.HitStopCoroutine(_hitStopDuration));
+                _screenShakeEffect.StartScreenShake(_screenShakeStrength);
+            }
+            else
+            {
+                Debug.LogWarning($"Missing effects components - HitStop: {_hitStopEffect != null}, ScreenShake: {_screenShakeEffect != null}");
+            }
         }
 
         // Reset perfect hit state whenever the ball collides with anything
