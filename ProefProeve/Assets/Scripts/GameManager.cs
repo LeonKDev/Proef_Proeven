@@ -17,15 +17,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance
     {
         get
-        {            if (_instance == null)
+        {
+            // Don't create a new instance during cleanup/quit
+            if (_instance == null && !ApplicationQuit)
             {
-                GameObject go = new GameObject("GameManager");
-                _instance = go.AddComponent<GameManager>();
-                DontDestroyOnLoad(go);
+                _instance = FindObjectOfType<GameManager>();
+                
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("GameManager");
+                    _instance = go.AddComponent<GameManager>();
+                    DontDestroyOnLoad(go);
+                }
             }
             return _instance;
         }
     }
+
+    private static bool ApplicationQuit = false;
 
     // Game state
     public bool isGameActive { get; private set; }
@@ -45,6 +54,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject tutorialUI;
+    private UIFadeManager _fadeManager;
     
     [Header("Game Start Animation")]
     [SerializeField] private Animator gameStartAnimator;
@@ -56,12 +66,20 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern setup
         if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            // Find or create UIFadeManager
+            _fadeManager = FindObjectOfType<UIFadeManager>();
+            if (_fadeManager == null)
+            {
+                GameObject fadeManagerObj = new GameObject("UIFadeManager");
+                _fadeManager = fadeManagerObj.AddComponent<UIFadeManager>();
+                DontDestroyOnLoad(fadeManagerObj);
+            }
         }
         else if (_instance != this)
         {
@@ -69,11 +87,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        ApplicationQuit = true;
+    }
+
     private void Start()
     {
         // Game should be inactive at start, with only the main menu shown
         DisableGameElements();
-        ShowMainMenu();
+        ShowMainMenu(true); // true for instant show on game start
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -86,7 +109,7 @@ public class GameManager : MonoBehaviour
         
         // Disable game elements and show main menu
         DisableGameElements();
-        ShowMainMenu();
+        ShowMainMenu(true); // true for instant show on scene load
     }
     
     /// <summary>
@@ -165,10 +188,10 @@ public class GameManager : MonoBehaviour
         // Make sure all game elements are found
         FindGameElements();
         
-        // Set up UI
-        if (mainMenuUI != null) mainMenuUI.SetActive(false);
-        if (gameplayUI != null) gameplayUI.SetActive(true);
-        if (tutorialUI != null) tutorialUI.SetActive(false);
+        // Set up UI with fade transitions
+        if (mainMenuUI != null) _fadeManager.HideUI(mainMenuUI);
+        if (gameplayUI != null) _fadeManager.ShowUI(gameplayUI);
+        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
         
         // Hide cursor during gameplay
         Cursor.visible = false;
@@ -206,10 +229,10 @@ public class GameManager : MonoBehaviour
         // Make sure all game elements are found
         FindGameElements();
         
-        // Set up UI
-        if (mainMenuUI != null) mainMenuUI.SetActive(false);
-        if (gameplayUI != null) gameplayUI.SetActive(true);
-        if (tutorialUI != null) tutorialUI.SetActive(true);
+        // Set up UI with fade transitions
+        if (mainMenuUI != null) _fadeManager.HideUI(mainMenuUI);
+        if (gameplayUI != null) _fadeManager.ShowUI(gameplayUI);
+        if (tutorialUI != null) _fadeManager.ShowUI(tutorialUI);
         
         // Keep cursor visible for tutorial UI
         Cursor.visible = true;
@@ -262,11 +285,22 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        // Show main menu UI
+        // Show main menu UI with fade transitions
         ShowMainMenu();
         
         // Notify listeners we're returning to menu
         OnReturnToMenu?.Invoke();
+    }
+
+    /// <summary>
+    /// Show the main menu UI
+    /// </summary>
+    private void ShowMainMenu(bool instant = false)
+    {
+        // Show main menu UI and hide other UIs with fade transitions
+        if (mainMenuUI != null) _fadeManager.ShowUI(mainMenuUI, instant);
+        if (gameplayUI != null) _fadeManager.HideUI(gameplayUI, instant);
+        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI, instant);
     }
     
     /// <summary>
@@ -301,24 +335,29 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Show the main menu UI
-    /// </summary>
-    private void ShowMainMenu()
-    {
-        // Show main menu UI and hide other UIs
-        if (mainMenuUI != null) mainMenuUI.SetActive(true);
-        if (gameplayUI != null) gameplayUI.SetActive(false);
-        if (tutorialUI != null) tutorialUI.SetActive(false);
-    }
-    
     // Add any game element that should be controlled by the game manager
     public void AddGameElement(GameObject element)
     {
         if (element != null && !additionalGameElements.Contains(element))
             additionalGameElements.Add(element);
     }
-    
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus && isGameActive && !isTutorialMode)
+        {
+            // Hide cursor when game window gains focus during gameplay
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            // Show cursor when window loses focus or in menu/tutorial
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
     private void OnDestroy()
     {
         if (_instance == this)

@@ -22,8 +22,11 @@ public class PlayerController : MonoBehaviour
     
     private void Start()
     {
-        // Find all balls in the scene
-        RefreshBallsList();
+        // Register this player with the ball registration manager
+        if (BallRegistrationManager.Instance != null)
+        {
+            BallRegistrationManager.Instance.RegisterPlayer(this);
+        }
         
         // Find boss object if not assigned
         if (bossObject == null)
@@ -33,6 +36,15 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.LogWarning("Boss reference not set and could not be found with tag");
             }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Unregister from the ball registration manager when destroyed
+        if (BallRegistrationManager.Instance != null)
+        {
+            BallRegistrationManager.Instance.UnregisterPlayer(this);
         }
     }
     
@@ -63,6 +75,7 @@ public class PlayerController : MonoBehaviour
         if (ball != null && !_activeBalls.Contains(ball))
         {
             _activeBalls.Add(ball);
+            Debug.Log($"Added ball to player's active balls list. Total balls: {_activeBalls.Count}");
         }
     }
     
@@ -74,6 +87,7 @@ public class PlayerController : MonoBehaviour
         if (ball != null)
         {
             _activeBalls.Remove(ball);
+            Debug.Log($"Removed ball from player's active balls list. Remaining balls: {_activeBalls.Count}");
         }
     }
     
@@ -104,7 +118,6 @@ public class PlayerController : MonoBehaviour
                 bounceMultiplier = normalBounceMultiplier * 1.5f; // Extra power for perfect hit
                 closestBall.SetPerfectHit(true);
                 
-                // Visual/audio feedback for perfect hit could go here
                 Debug.Log("Perfect hit! Ball directed toward boss.");
             }
             else
@@ -147,12 +160,6 @@ public class PlayerController : MonoBehaviour
     /// <returns>The closest ball controller or null if none in range</returns>
     private BallController FindClosestBallInRange()
     {
-        // If the list is empty, try refreshing it
-        if (_activeBalls.Count == 0)
-        {
-            RefreshBallsList();
-        }
-        
         BallController closestBall = null;
         float closestDistance = maxHitDistance;
         
