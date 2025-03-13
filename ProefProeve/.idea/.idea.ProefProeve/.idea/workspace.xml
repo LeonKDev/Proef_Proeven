@@ -3,13 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="8dee900f-d847-4f0e-a608-4d1a32f39781" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProefProeve/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Score System.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Score System.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Score_Object.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Score_Object.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Boss_Animating_Richard.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Boss_Animating_Richard.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Character Textures.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Character Textures.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/AttackState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/AttackState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerHealth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerHealth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/IdleState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/IdleState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Boss/States/StaggeredState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Boss/States/StaggeredState.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +97,7 @@
       <updated>1741679400512</updated>
       <workItem from="1741679404768" duration="3224000" />
       <workItem from="1741769251308" duration="3801000" />
+      <workItem from="1741859107879" duration="2543000" />
     </task>
     <servers />
   </component>

@@ -4,10 +4,11 @@ using UnityEngine;
 public class IdleState : State
 {
     protected StateMachine _stateMachine;
-    private BossStats _bossStats;
+    
     [SerializeField] private float attackTime;
-
-    public GameObject test;
+    [SerializeField] private Animator animator;
+    
+    private BossStats _bossStats;
 
     private void Awake()
     {
@@ -18,16 +19,16 @@ public class IdleState : State
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("enter IdleState");
-        test.GetComponent<Renderer>().material.color = Color.green;
+        animator.SetTrigger("Idle");
+        Debug.Log("enter idle");
     }
 
     public override void Exit()
     {
         base.Exit();
-        Debug.Log("Exit IdleState");
+        Debug.Log("exit Idle");
     }
-    
+
     public override void Tick()
     {
         base.Tick();

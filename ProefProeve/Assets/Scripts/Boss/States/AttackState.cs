@@ -2,40 +2,49 @@ using UnityEngine;
 
 public class AttackState : State
 {
-    protected StateMachine StateMachine;
-    private BossStats _bossStats;
+    protected StateMachine _stateMachine;
+    
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
+    [SerializeField] private Animator animator;
+    
+    private BossStats _bossStats;
     public GameObject test;
     private void Awake()
     {
-        StateMachine = GetComponent<StateMachine>();
+        _stateMachine = GetComponent<StateMachine>();
         _bossStats = GetComponent<BossStats>();
     }
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Enter AttackState");
-        test.GetComponent<Renderer>().material.color = Color.red;
+        Debug.Log("enter attack");
+        if (!_bossStats.HasBall)
+        {
+            _stateMachine.ChangeState<IdleState>();
+        }
+        
+        animator.SetTrigger("Attack");
         
         //spawns the ball
         Instantiate(ballPrefab, ballSpawnPoint);
         _bossStats.HasBall = false;
-        StateMachine.ChangeState<IdleState>();
+        
+        _stateMachine.ChangeState<IdleState>();
     }
-
+    
     public override void Exit()
     {
         base.Exit();
-        Debug.Log("Exit AttackState");
+        Debug.Log("exit attack");
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
-            StateMachine.ChangeState<StaggeredState>();
+            _stateMachine.ChangeState<StaggeredState>();
         }
     }
 }

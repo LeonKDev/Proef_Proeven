@@ -143,7 +143,7 @@ PrefabInstance:
     - target: {fileID: 6741840712903901551, guid: b270f0db10d03524b967ba4a6d1cc1fd,
         type: 3}
       propertyPath: SpawnAmount
-      value: 5000
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8396565539001273109, guid: b270f0db10d03524b967ba4a6d1cc1fd,
         type: 3}
@@ -942,10 +942,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1804200770101877226, guid: c3714eceea903a04d91821c6bca3261a,
         type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2130233363}
+    - target: {fileID: 1804200770101877226, guid: c3714eceea903a04d91821c6bca3261a,
+        type: 3}
       propertyPath: ballPrefab
       value: 
       objectReference: {fileID: 2543072121916231584, guid: 200608a227f129f4db65985148bd5e12,
         type: 3}
+    - target: {fileID: 1909774630139854041, guid: c3714eceea903a04d91821c6bca3261a,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2130233363}
     - target: {fileID: 2697856840704794183, guid: c3714eceea903a04d91821c6bca3261a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1026,6 +1036,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6884347565808337714, guid: c3714eceea903a04d91821c6bca3261a,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2130233363}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7473,7 +7488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 3
   damageBreakTimer: 3
-  colorOnDamage: {r: 0, g: 0, b: 0, a: 1}
+  colorOnDamage: {r: 1, g: 0, b: 0, a: 0}
   renderer: {fileID: 2030343123}
 --- !u!65 &2051630813
 BoxCollider:
@@ -12358,6 +12373,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5b0d815356edcfb4189dfd31284d1294,
     type: 3}
   m_PrefabInstance: {fileID: 1541983909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2130233363 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 236979786932882693, guid: c3714eceea903a04d91821c6bca3261a,
+    type: 3}
+  m_PrefabInstance: {fileID: 746063782}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

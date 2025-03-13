@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class StaggeredState : State
 {
-    [SerializeField] private float staggerTime;
     protected StateMachine _stateMachine;
+    
+    [SerializeField] private float staggerTime;
+    [SerializeField] private Animator animator;
+    
     private BossStats _bossStats;
     public GameObject test;
     private void Awake()
@@ -18,7 +21,7 @@ public class StaggeredState : State
     {
         base.Enter();
         Debug.Log("Enter StaggeredState");
-        test.GetComponent<Renderer>().material.color = Color.yellow;
+        animator.SetTrigger("Staggerd");
     }
 
     public override void Exit()
