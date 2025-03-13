@@ -6466,7 +6466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8eccb748593784bbd42b105dc4ac91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiKeyStorage: {fileID: 11400000, guid: a51ad06e85f6625468edeb95b06cdc1b, type: 2}
+  apiKeyStorage: {fileID: 11400000, guid: 56f60192f6fccac4e8da24380b391732, type: 2}
   model: gpt-4o-mini
   endpoint: https://api.openai.com/v1/chat/completions
   temperature: 1
@@ -7194,7 +7194,7 @@ MonoBehaviour:
     loop: 1
     introClip: {fileID: 0}
   crossFadeDuration: 1.5
-  bossTransitionTime: 60
+  bossTransitionTime: 1
 --- !u!4 &2040048253
 Transform:
   m_ObjectHideFlags: 0
