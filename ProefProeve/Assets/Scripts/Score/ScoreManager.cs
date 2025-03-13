@@ -7,9 +7,15 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
     
     //References for UI
-    [Header("UI References")]
+    [Header("Primary UI References")]
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI highScoreText;
+    
+    [Header("Additional Score Displays")]
+    [SerializeField] private TextMeshProUGUI[] additionalScoreTexts;
+    [SerializeField] private TextMeshProUGUI[] additionalHighScoreTexts;
+    
+    [Header("Score Visual Effects")]
     [SerializeField] private Canvas collisionHitPrefab;
     
     private int _score;
@@ -30,30 +36,52 @@ public class ScoreManager : MonoBehaviour
     private void Start()
     {
         _highScore = PlayerPrefs.GetInt("highscore", 0);
+        UpdateAllScoreDisplays();
+    }
+
+    private void UpdateAllScoreDisplays()
+    {
+        string scoreString = Score.ToString("00000");
+        string highScoreString = _highScore.ToString("00000");
         
-        scoreText.text = Score.ToString("00000");
-        highScoreText.text = _highScore.ToString("00000");
+        // Update main displays
+        if (scoreText != null) scoreText.text = scoreString;
+        if (highScoreText != null) highScoreText.text = highScoreString;
+        
+        // Update additional displays
+        if (additionalScoreTexts != null)
+        {
+            foreach (var text in additionalScoreTexts)
+            {
+                if (text != null) text.text = scoreString;
+            }
+        }
+        
+        if (additionalHighScoreTexts != null)
+        {
+            foreach (var text in additionalHighScoreTexts)
+            {
+                if (text != null) text.text = highScoreString;
+            }
+        }
     }
     
-    /// <summary>
-    /// <c>AddPoints</c> Adds the amount to the current score.
-    /// </summary>
     public void AddPoints(int amount)
     {
         // adds points to the score
         Score += amount;
-        scoreText.text = Score.ToString("00000");
         
-        if (_highScore > Score)
-            return;
-
-        // saves the highest score outside the game loop
-        PlayerPrefs.SetInt("highscore", Score);
+        // Update high score if needed
+        if (Score > _highScore)
+        {
+            _highScore = Score;
+            PlayerPrefs.SetInt("highscore", _highScore);
+        }
+        
+        // Update all displays
+        UpdateAllScoreDisplays();
     }
     
-    /// <summary>
-    /// <c>InstantiateScoreObject</c> instantiates a score object at the current collision point 
-    /// </summary> 
     public void InstantiateScoreObject(Collision col, int pointsOnHit)
     {
         ContactPoint contact = col.GetContact(0);

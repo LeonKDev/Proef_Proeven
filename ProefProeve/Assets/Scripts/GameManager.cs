@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -39,8 +40,8 @@ public class GameManager : MonoBehaviour
     // Game state
     public bool isGameActive { get; private set; }
     public bool isTutorialMode { get; private set; } = false;
+    private bool isVictoryState = false;
     
-    // Tutorial settings
     [Header("Tutorial Settings")]
     [SerializeField] private float tutorialBallSpeedMultiplier = 0.3f;
     
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject tutorialUI;
+    [SerializeField] private GameObject[] victoryObjects;
     private UIFadeManager _fadeManager;
     
     [Header("Game Start Animation")]
@@ -96,7 +98,20 @@ public class GameManager : MonoBehaviour
     {
         // Game should be inactive at start, with only the main menu shown
         DisableGameElements();
+        HideVictoryObjects();
         ShowMainMenu(true); // true for instant show on game start
+    }
+
+    private void Update()
+    {
+        // Check for restart input in victory state
+        if (isVictoryState)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                ReturnToMainMenu();
+            }
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -109,7 +124,12 @@ public class GameManager : MonoBehaviour
         
         // Disable game elements and show main menu
         DisableGameElements();
+        HideVictoryObjects();
         ShowMainMenu(true); // true for instant show on scene load
+
+        // Reset cursor state
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
     
     /// <summary>
@@ -219,8 +239,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Start the
-    /// game in tutorial mode
+    /// Start the game in tutorial mode
     /// </summary>
     public void StartTutorial()
     {
@@ -277,21 +296,38 @@ public class GameManager : MonoBehaviour
     {
         isTutorialMode = false;
         isGameActive = false;
-        
-        // Disable game elements
-        DisableGameElements();
-        
-        // Show cursor for menu interaction
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        
-        // Show main menu UI with fade transitions
-        ShowMainMenu();
-        
-        // Notify listeners we're returning to menu
+        isVictoryState = false;
+
+        // Notify listeners we're returning to menu before reloading
         OnReturnToMenu?.Invoke();
+
+        // Reset game state
+        ClearPersistentObjects();
+        
+        // Get current scene name and reload it
+        string currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentScene);
     }
 
+    private void ClearPersistentObjects()
+    {
+        // Find and destroy any persistent game objects that shouldn't survive reload
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            // Don't destroy the GameManager itself or the MusicManager
+            if (obj != gameObject && obj.GetComponent<MusicManager>() == null)
+            {
+                // Check if the object is marked DontDestroyOnLoad
+                Scene objScene = obj.scene;
+                if (objScene.buildIndex == -1) // DontDestroyOnLoad objects are in a special scene
+                {
+                    Destroy(obj);
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// Show the main menu UI
     /// </summary>
@@ -363,6 +399,53 @@ public class GameManager : MonoBehaviour
         if (_instance == this)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
+    /// <summary>
+    /// Called when the boss is defeated to hide game elements
+    /// </summary>
+    public void HandleBossDefeated()
+    {
+        // Hide UI
+        if (gameplayUI != null) _fadeManager.HideUI(gameplayUI);
+        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
+        
+        // Hide game elements
+        DisableGameElements();
+        
+        // Show victory objects
+        ShowVictoryObjects();
+        
+        // Show cursor
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        // Set victory state
+        isVictoryState = true;
+    }
+
+    private void ShowVictoryObjects()
+    {
+        if (victoryObjects != null)
+        {
+            foreach (var obj in victoryObjects)
+            {
+                if (obj != null)
+                    obj.SetActive(true);
+            }
+        }
+    }
+
+    private void HideVictoryObjects()
+    {
+        if (victoryObjects != null)
+        {
+            foreach (var obj in victoryObjects)
+            {
+                if (obj != null)
+                    obj.SetActive(false);
+            }
         }
     }
 }
