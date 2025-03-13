@@ -41695,7 +41695,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 98aa777ad4144be40a8ddd952571e9d2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.32
+      value: 6.61
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 98aa777ad4144be40a8ddd952571e9d2,
         type: 3}
@@ -53023,12 +53023,32 @@ PrefabInstance:
         type: 3}
       propertyPath: bossObject
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1135025160}
     - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
         type: 3}
       propertyPath: playerObject
       value: 
       objectReference: {fileID: 2051630806}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: useRandomInitialDirection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: initialVelocityDirection.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: initialVelocityDirection.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: initialVelocityDirection.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3987188235307287747, guid: 200608a227f129f4db65985148bd5e12,
         type: 3}
       propertyPath: destroyDelay

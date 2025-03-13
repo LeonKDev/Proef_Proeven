@@ -21,18 +21,14 @@ public class BallMovementHandler : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _currentSpeed = _controller.BaseSpeed;
 
-        // Set initial random direction
-        _direction = new Vector3(
-            Random.Range(-1f, 1f),
-            0f,
-            Random.Range(-1f, 1f)
-        ).normalized;
+        // Use the initial direction from BallController
+        _direction = _controller.InitialVelocityDirection;
         
         // Apply initial movement
         ApplyVelocity();
         
         // Debug message to verify initialization
-        Debug.Log("BallMovementHandler initialized with base speed: " + _currentSpeed);
+        Debug.Log($"BallMovementHandler initialized with base speed: {_currentSpeed} and direction: {_direction}");
     }
 
     void FixedUpdate()
@@ -60,7 +56,7 @@ public class BallMovementHandler : MonoBehaviour
     {
         _direction = new Vector3(newDirection.x, 0f, newDirection.z).normalized;
         ApplyVelocity();
-        Debug.Log("Setting ball direction to: " + _direction + " with speed: " + _currentSpeed);
+        Debug.Log($"Setting ball direction to: {_direction} with speed: {_currentSpeed}");
     }
 
     public void ApplyVelocity()

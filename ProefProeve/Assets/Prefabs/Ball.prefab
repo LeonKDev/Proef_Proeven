@@ -4979,15 +4979,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSpeed: 30
+  initialVelocityDirection: {x: 0, y: 0, z: 1}
+  useRandomInitialDirection: 0
   boostMultiplier: 1
   boostDuration: 3
   playerObject: {fileID: 0}
   bossObject: {fileID: 0}
-  ballOwner: 1
   curveStrength: 0.25
   curveResponse: 3
-  BossRef: {fileID: 0}
-  PlayerRef: {fileID: 0}
 --- !u!114 &3987188235307287747
 MonoBehaviour:
   m_ObjectHideFlags: 0
