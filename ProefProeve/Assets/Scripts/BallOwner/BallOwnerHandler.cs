@@ -8,8 +8,8 @@ using BallGame.Shared;
 /// </summary>
 public class BallOwnerHandler : MonoBehaviour
 {
-    [SerializeField] private float ownershipTimeoutDuration = 3f; // Time after which ball ownership changes to Boss
-
+    [SerializeField] private float ownershipTimeoutDuration = 3f; // Increased from 3f to 10f
+    
     private BallController _ballController;
     private float _lastPlayerInteractionTime;
     private BallOwnerType _currentOwner = BallOwnerType.Boss;
@@ -46,6 +46,9 @@ public class BallOwnerHandler : MonoBehaviour
     /// </summary>
     public void SetOwner(BallOwnerType owner)
     {
+        // Update the current owner first
+        _currentOwner = owner;
+
         // Reset the timer when player gets ownership
         if (owner == BallOwnerType.Player)
         {
