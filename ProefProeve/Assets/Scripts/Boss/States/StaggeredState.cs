@@ -1,42 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StaggeredState : State
 {
-    protected StateMachine _stateMachine;
-    
+    [Header("State Settings")]
     [SerializeField] private float staggerTime;
-    [SerializeField] private Animator animator;
-    
+    private float currentStaggerTime;
+
+    // References to other components
+    private StateMachine _stateMachine;
     private BossStats _bossStats;
-    public GameObject test;
+    private Animator _animator;
+    
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
         _bossStats = GetComponent<BossStats>();
+        _animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Start()
+    {
+        currentStaggerTime = staggerTime;
     }
 
     public override void Enter()
     {
-        base.Enter();
-        Debug.Log("Enter StaggeredState");
-        animator.SetTrigger("Staggerd");
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        Debug.Log("Exit StaggeredState");
+        _animator.SetTrigger("Staggerd");
+        _bossStats.DamageBoss(1);
     }
     
     public override void Tick()
     {
-        base.Tick();
-        staggerTime -= Time.deltaTime;
+        currentStaggerTime -= Time.deltaTime;
 
-        if (staggerTime <= 0.0f)
+        if (currentStaggerTime <= 0.0f)
         {
+            currentStaggerTime = staggerTime;
+            _bossStats.HasBall = true;
             _stateMachine.ChangeState<IdleState>();
         }
     }

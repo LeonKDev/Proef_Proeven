@@ -1,23 +1,26 @@
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class SpawnBoss : MonoBehaviour
 {
-    [SerializeField] private int SpawnAmount;
+    [Header("Spawn Settings")]
+    [SerializeField] private int spawnScore;
+    
+    [Header("Spawn References")]
     [SerializeField] private GameObject firstBall;
     [SerializeField] private GameObject boss;
     [SerializeField] private Transform bossSpawnPoint;
 
     private bool bossSpawned;
-    
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
-        if (ScoreManager.Instance.Score >= SpawnAmount && !bossSpawned)
+        // Spawns the boss if the desired score is reached
+        if (ScoreManager.Instance.Score >= spawnScore && !bossSpawned)
         {
             bossSpawned = true;
             Time.timeScale = 1;
             Destroy(firstBall);
+            Time.timeScale = 1;
             boss.gameObject.transform.position = bossSpawnPoint.transform.position;
             boss.SetActive(true);
         }

@@ -2,49 +2,54 @@ using UnityEngine;
 
 public class AttackState : State
 {
-    protected StateMachine _stateMachine;
-    
+    [Header("Ball References")]
     [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private Transform ballSpawnPoint;
-    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject ballSpawnPoint;
     
+    // References to other components
+    private StateMachine _stateMachine;
     private BossStats _bossStats;
-    public GameObject test;
+    private Animator _animator;
+    
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
         _bossStats = GetComponent<BossStats>();
+        _animator = GetComponentInChildren<Animator>();
     }
-
+    
     public override void Enter()
     {
-        base.Enter();
-        Debug.Log("enter attack");
         if (!_bossStats.HasBall)
         {
             _stateMachine.ChangeState<IdleState>();
         }
         
-        animator.SetTrigger("Attack");
+        _animator.SetTrigger("Attack");
         
         //spawns the ball
-        Instantiate(ballPrefab, ballSpawnPoint);
+        Instantiate(ballPrefab, ballSpawnPoint.transform.position ,Quaternion.Euler(Vector3.forward));
         _bossStats.HasBall = false;
-        
-        _stateMachine.ChangeState<IdleState>();
     }
-    
-    public override void Exit()
+
+    public override void Tick()
     {
-        base.Exit();
-        Debug.Log("exit attack");
-    }
-    
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ball"))
+        base.Tick();
+        if (_bossStats.HasBall == false)
         {
+            _stateMachine.ChangeState<IdleState>();
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            Time.timeScale = 1;
+            Destroy(other.gameObject);
+            Time.timeScale = 1;
             _stateMachine.ChangeState<StaggeredState>();
         }
     }
 }
+

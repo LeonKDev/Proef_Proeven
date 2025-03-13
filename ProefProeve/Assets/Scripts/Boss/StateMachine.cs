@@ -2,26 +2,32 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    public State CurrentState => _currentState;
     private State _currentState;
+    private bool _inTransition;
     
-    protected bool InTransition;
-
+    public State CurrentState => _currentState;
+    
     private void Start()
     {
+        // Sets the starting state of the boss
         ChangeState<IdleState>();
     }
 
     private void Update()
     {
-        if (CurrentState != null && !InTransition)
+        if (CurrentState != null && !_inTransition)
         {
             CurrentState.Tick();
         }
     }
-
+    
+    /// <summary>
+    /// Changes the current state of the boss
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public void ChangeState<T>() where T : State
     {
+        // Makes a reference to the state we want to change to
         T targetState = GetComponent<T>();
 
         if (targetState == null)
@@ -32,23 +38,23 @@ public class StateMachine : MonoBehaviour
         InitiateNewState(targetState);
     }
 
-    public void InitiateNewState(State targetState)
+    private void InitiateNewState(State targetState)
     {
-        if (_currentState != targetState && !InTransition)
+        if (_currentState != targetState && !_inTransition)
         {
             CallNewState(targetState);
         }
     }
 
-    public void CallNewState(State newState)
+    private void CallNewState(State newState)
     {
-        InTransition = true;
+        _inTransition = true;
         
         _currentState?.Exit();
         _currentState = newState;
         _currentState?.Enter();
 
-        InTransition = false;
+        _inTransition = false;
     }
 }
 

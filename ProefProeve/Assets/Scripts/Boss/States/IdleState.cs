@@ -1,49 +1,52 @@
-using System;
 using UnityEngine;
 
 public class IdleState : State
 {
-    protected StateMachine _stateMachine;
+    [Header("State Settings")]
+    [SerializeField] private float currentAttackWaitTime;
+    private float _oldAttackWaitTime;
     
-    [SerializeField] private float attackTime;
-    [SerializeField] private Animator animator;
     
+    // References to other components
+    private StateMachine _stateMachine;
     private BossStats _bossStats;
-
+    private Animator _animator;
     private void Awake()
     {
         _stateMachine = GetComponent<StateMachine>();
         _bossStats = GetComponent<BossStats>();
+        _animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Start()
+    {
+        _oldAttackWaitTime = currentAttackWaitTime;
     }
 
     public override void Enter()
     {
-        base.Enter();
-        animator.SetTrigger("Idle");
-        Debug.Log("enter idle");
+        _animator.SetTrigger("Idle");
     }
-
-    public override void Exit()
-    {
-        base.Exit();
-        Debug.Log("exit Idle");
-    }
-
+    
     public override void Tick()
     {
-        base.Tick();
-        attackTime -= Time.deltaTime;
+        currentAttackWaitTime -= Time.deltaTime;
 
-        if (attackTime <= 0.0f && _bossStats.HasBall)
+        if (currentAttackWaitTime <= 0.0f && _bossStats.HasBall)
         {
+            currentAttackWaitTime = _oldAttackWaitTime;
             _stateMachine.ChangeState<AttackState>();
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
+    
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Ball"))
+        if (other.gameObject.CompareTag("Ball"))
         {
+            Time.timeScale = 1;
+            Destroy(other.gameObject);
+            Time.timeScale = 1;
+            
             _stateMachine.ChangeState<StaggeredState>();
         }
     }

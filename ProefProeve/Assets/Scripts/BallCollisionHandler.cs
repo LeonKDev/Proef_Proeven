@@ -80,7 +80,7 @@ public class
             }
             
             // Debug messages for collision
-            Debug.Log("Ball collision at speed: " + _movementHandler.CurrentSpeed);
+            //Debug.Log("Ball collision at speed: " + _movementHandler.CurrentSpeed);
             
             // Reflect the current direction based on collision normal
             Vector3 normal = collision.contacts[0].normal;
