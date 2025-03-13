@@ -17,24 +17,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance
     {
         get
-        {
-            // Don't create a new instance during cleanup/quit
-            if (_instance == null && !ApplicationQuit)
+        {            if (_instance == null)
             {
-                _instance = FindObjectOfType<GameManager>();
-                
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("GameManager");
-                    _instance = go.AddComponent<GameManager>();
-                    DontDestroyOnLoad(go);
-                }
+                GameObject go = new GameObject("GameManager");
+                _instance = go.AddComponent<GameManager>();
+                DontDestroyOnLoad(go);
             }
             return _instance;
         }
     }
-
-    private static bool ApplicationQuit = false;
 
     // Game state
     public bool isGameActive { get; private set; }
@@ -65,6 +56,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton pattern setup
         if (_instance == null)
         {
             _instance = this;
@@ -75,11 +67,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void OnApplicationQuit()
-    {
-        ApplicationQuit = true;
     }
 
     private void Start()
@@ -204,8 +191,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void QuitGame(){
+        Application.Quit();
+    }
+
     /// <summary>
-    /// Start the game in tutorial mode
+    /// Start the
+    /// game in tutorial mode
     /// </summary>
     public void StartTutorial()
     {
