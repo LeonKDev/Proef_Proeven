@@ -8,7 +8,7 @@ using BallGame.Shared;
 /// </summary>
 public class BallOwnerHandler : MonoBehaviour
 {
-    [SerializeField] private float ownershipTimeoutDuration = 10f; // Time after which ball ownership changes to Boss
+    [SerializeField] private float ownershipTimeoutDuration = 3f; // Time after which ball ownership changes to Boss
 
     private BallController _ballController;
     private float _lastPlayerInteractionTime;
@@ -33,6 +33,12 @@ public class BallOwnerHandler : MonoBehaviour
                 SetOwner(BallOwnerType.Boss);
             }
         }
+
+        // Ensure the BallController's ownership value is kept in sync
+        if (_ballController != null)
+        {
+            _ballController.BallOwner = _currentOwner;
+        }
     }
 
     /// <summary>
@@ -40,12 +46,16 @@ public class BallOwnerHandler : MonoBehaviour
     /// </summary>
     public void SetOwner(BallOwnerType owner)
     {
-        _currentOwner = owner;
-
         // Reset the timer when player gets ownership
         if (owner == BallOwnerType.Player)
         {
             _lastPlayerInteractionTime = Time.time;
+        }
+
+        // Ensure the BallController's ownership value is updated
+        if (_ballController != null)
+        {
+            _ballController.BallOwner = _currentOwner;
         }
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using BallGame.Shared;
 
 public class BallController : MonoBehaviour
 {
@@ -15,7 +16,11 @@ public class BallController : MonoBehaviour
     [Header("Targeting References")]
     [SerializeField] private GameObject playerObject;
     [SerializeField] private GameObject bossObject;
-    
+
+    // Ball ownership
+    [Header("Ball Ownership")]
+    [SerializeField] private BallOwnerType ballOwner = BallOwnerType.Boss;
+
     // Curving behavior settings
     [Header("Curving Behavior")]
     [SerializeField] private float curveStrength = 0.02f; // How much to adjust the direction
@@ -25,7 +30,8 @@ public class BallController : MonoBehaviour
     private BallMovementHandler _movementHandler;
     private BallBoostHandler _boostHandler;
     private BallCollisionHandler _collisionHandler;
-    
+    private BallOwnerHandler _ownerHandler;
+
     // State tracking
     private bool _isPerfectHit = false;
     private bool _isHit = false;
@@ -41,13 +47,25 @@ public class BallController : MonoBehaviour
     public GameObject PlayerObject => playerObject;
     public GameObject BossObject => bossObject;
 
+    // Material ref
+    public Material BossRef;
+    public Material PlayerRef;
+
+    // Property for ball owner
+    public BallOwnerType BallOwner
+    {
+        get => ballOwner;
+        set => ballOwner = value;
+    }
+
     private void Awake()
     {
         // Add all required components
         _movementHandler = gameObject.AddComponent<BallMovementHandler>();
         _boostHandler = gameObject.AddComponent<BallBoostHandler>();
         _collisionHandler = gameObject.AddComponent<BallCollisionHandler>();
-        
+        _ownerHandler = gameObject.AddComponent<BallOwnerHandler>();
+
         // Find reference objects if not set
         if (playerObject == null) {
             playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -64,17 +82,85 @@ public class BallController : MonoBehaviour
         _movementHandler.Initialize(this);
         _boostHandler.Initialize(this, _movementHandler);
         _collisionHandler.Initialize(this, _movementHandler);
+        _ownerHandler.Initialize(this);
+
+
+        // Safely register this ball with the BallRegistrationManager
+        SafeRegisterWithManager();
         
-        // Register this ball with the BallRegistrationManager
-        BallRegistrationManager.Instance.RegisterBall(this);
+        // Disable the ball if game is not active
+        CheckGameState();
     }
     
-    private void OnDestroy()
+    private void Update()
     {
-        // Unregister this ball when destroyed
+        switch (ballOwner)
+        {
+            case BallOwnerType.Player:
+                // Do Player logic
+                GetComponent<Renderer>().material = PlayerRef;
+                break;
+            case BallOwnerType.Boss:
+                GetComponent<Renderer>().material = BossRef;
+                // Do Boss logic
+                break;
+        }
+
+        // Only process input and movement if game is active
+        if (GameManager.Instance != null && !GameManager.Instance.isGameActive)
+        {
+            return;
+        }
+        
+        // Normal update logic would go here if needed
+    }
+    
+    /// <summary>
+    /// Check game state and disable ball if game is not active
+    /// </summary>
+    private void CheckGameState()
+    {
+        if (GameManager.Instance != null && !GameManager.Instance.isGameActive)
+        {
+            // Disable movement or other components that should only work when game is active
+            if (_movementHandler != null)
+            {
+                _movementHandler.enabled = false;
+            }
+            
+            if (_boostHandler != null)
+            {
+                _boostHandler.enabled = false;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Called by GameManager when game starts
+    /// </summary>
+    public void OnGameStart()
+    {
+        if (_movementHandler != null)
+        {
+            _movementHandler.enabled = true;
+        }
+        
+        if (_boostHandler != null)
+        {
+            _boostHandler.enabled = true;
+        }
+    }
+    
+    /// <summary>
+    /// Safely registers this ball with the BallRegistrationManager
+    /// Creates the manager if it doesn't exist
+    /// </summary>
+    private void SafeRegisterWithManager()
+    {
+        // Safely register this ball with the BallRegistrationManager
         if (BallRegistrationManager.Instance != null)
         {
-            BallRegistrationManager.Instance.UnregisterBall(this);
+            BallRegistrationManager.Instance.RegisterBall(this);
         }
     }
     
@@ -84,6 +170,7 @@ public class BallController : MonoBehaviour
     public void SetPerfectHit(bool isPerfect)
     {
         _isPerfectHit = isPerfect;
+        _ownerHandler.SetOwner(BallOwnerType.Player);
     }
     
     /// <summary>

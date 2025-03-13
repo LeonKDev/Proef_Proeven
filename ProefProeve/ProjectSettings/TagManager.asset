@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ball
-  - Boss
+  - PlayerContainer
+  - BossContainer
+  - BallContainer
+  - Spark
   layers:
   - Default
   - TransparentFX
