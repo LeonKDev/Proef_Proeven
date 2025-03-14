@@ -6,7 +6,7 @@ Rogue Code is a  timing-based game that challenges players to defeat a AI boss. 
 
 ### Developers
 - Miyaki Truong(SCRUM master)
-  - ChatGPT Integration
+  - ChatGPT Integration ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#chatgpt-integration))
   - Ball Behaviour
   - Music Manager
     
