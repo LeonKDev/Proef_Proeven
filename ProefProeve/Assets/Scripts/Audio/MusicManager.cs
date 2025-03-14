@@ -45,18 +45,20 @@ public class MusicManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             
+            // Initialize audio sources
             _activeSource = gameObject.AddComponent<AudioSource>();
             _inactiveSource = gameObject.AddComponent<AudioSource>();
+            
+            // Register for scene load events
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        else
+        else if (Instance != this)
         {
+            // If there's already an instance, destroy this one
             Destroy(gameObject);
             return;
         }
-        
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     
     private void Start()
@@ -104,6 +106,7 @@ public class MusicManager : MonoBehaviour
         if (Instance == this)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            Instance = null;
         }
     }
 
