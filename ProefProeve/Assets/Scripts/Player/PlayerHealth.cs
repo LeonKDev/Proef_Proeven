@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Health References")] 
     [SerializeField] private Slider HealthUI;
-    [SerializeField] private Renderer renderer;
+    [SerializeField] private new Renderer renderer;
     
     private bool _damageBreak;
     private bool _colorChange;
@@ -39,7 +40,6 @@ public class PlayerHealth : MonoBehaviour
         if (!_damageBreak)
             return;
         
-        
         damageBreakTimer -= Time.deltaTime;
         
         if (damageBreakTimer <= 0)
@@ -58,32 +58,30 @@ public class PlayerHealth : MonoBehaviour
         HealthUI.value = Health;
         _damageBreak = true;
         
+        // Play hit flash through GameManager
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayHitFlash(renderer, colorOnDamage);
+        }
+        
         if (Health <= 0)
         {
             Death();
         }
-        
-        StartCoroutine(HitFlash()); ;
     }
 
     private void Death()
     {
+        // Let the GameManager handle the game over screen
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.HandlePlayerDeath();
+        }
+
+        // Destroy the player object
         Destroy(gameObject);
     }
 
-    public IEnumerator HitFlash()
-    {
-        Debug.Log("flash");
-        var material = renderer.material;
-        material.color = colorOnDamage;     
-        yield return new WaitForSeconds(0.5f); 
-        material.color = Color.white;     
-        yield return new WaitForSeconds(0.5f);
-        material.color = colorOnDamage;     
-        yield return new WaitForSeconds(0.5f); 
-        material.color = Color.white;     
-        yield return new WaitForSeconds(0.5f);
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ball"))

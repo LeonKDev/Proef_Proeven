@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 /// <summary>
 /// Manages game state and modes
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject tutorialUI;
-    [SerializeField] private GameObject[] victoryObjects;
+    public GameObject[] victoryObjects; // Made public to allow PlayerHealth to access it
     private UIFadeManager _fadeManager;
     
     [Header("Game Start Animation")]
@@ -414,6 +415,48 @@ public class GameManager : MonoBehaviour
         isVictoryState = true;
     }
 
+    /// <summary>
+    /// Called when the player dies to show game over screen
+    /// </summary>
+    public void HandlePlayerDeath()
+    {
+        // Hide UI
+        if (gameplayUI != null) _fadeManager.HideUI(gameplayUI);
+        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
+        
+        // Hide game elements
+        DisableGameElements();
+        
+        // Show victory/game over objects
+        ShowVictoryObjects();
+        
+        // Update the victory text to say "Game Over"
+        if (victoryObjects != null)
+        {
+            foreach (var obj in victoryObjects)
+            {
+                if (obj != null)
+                {
+                    TextMeshProUGUI[] texts = obj.GetComponentsInChildren<TextMeshProUGUI>(true);
+                    foreach (TextMeshProUGUI text in texts)
+                    {
+                        if (text.text.Contains("Victory") || text.text.Contains("Game End"))
+                        {
+                            text.text = "Game Over";
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Show cursor
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        // Set victory state (this enables the return to menu input)
+        isVictoryState = true;
+    }
+
     private void ShowVictoryObjects()
     {
         if (victoryObjects != null)
@@ -436,5 +479,30 @@ public class GameManager : MonoBehaviour
                     obj.SetActive(false);
             }
         }
+    }
+
+    public void PlayHitFlash(Renderer renderer, Color flashColor)
+    {
+        if (renderer != null)
+        {
+            StartCoroutine(HitFlashCoroutine(renderer, flashColor));
+        }
+    }
+
+    private IEnumerator HitFlashCoroutine(Renderer renderer, Color flashColor)
+    {
+        if (renderer == null) yield break;
+        
+        var material = renderer.material;
+        Color originalColor = material.color;
+        
+        material.color = flashColor;     
+        yield return new WaitForSeconds(0.5f); 
+        material.color = originalColor;     
+        yield return new WaitForSeconds(0.5f);
+        material.color = flashColor;     
+        yield return new WaitForSeconds(0.5f); 
+        material.color = originalColor;     
+        yield return new WaitForSeconds(0.5f);
     }
 }

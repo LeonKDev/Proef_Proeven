@@ -48456,7 +48456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Game End
+  m_text: Victory
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3a0f58139a22a8d4b90d5680f6b41b3e, type: 2}
   m_sharedMaterial: {fileID: -3118406454996721226, guid: 3a0f58139a22a8d4b90d5680f6b41b3e,
