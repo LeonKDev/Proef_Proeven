@@ -7,16 +7,16 @@ Rogue Code is a  timing-based game that challenges players to defeat a AI boss. 
 ### Developers
 - Miyaki Truong(SCRUM master)
   - ChatGPT Integration ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#chatgpt-integration))
-  - Ball Behaviour
-  - Music Manager
+  - Ball System ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#ball-system))
+  - Audio System ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#audio-system))
     
 - Ahmad Mosawer Asghari(Lead Developer)
-  - Screen Shake
-  - Parry Vision Cone
+  - Screen Shake ([Wiki]())
+  - Parry Vision Cone ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#playerviewcone-twopartvisioncone))
     
 - Leon Kruijer(Product Owner)
-  - Boss Behaviour
-  - Score System 
+  - Boss Behaviour ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#boss))
+  - Score System ([Wiki](https://github.com/LeonKDev/Proef_Proeven/wiki/Technical-Design#score-system))
 
 ### Artists
 
