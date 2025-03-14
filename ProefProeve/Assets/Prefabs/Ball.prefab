@@ -4860,7 +4860,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2366712355157249803}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -287.95, y: -359.35562, z: 345.42}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
@@ -4979,7 +4979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSpeed: 30
-  initialVelocityDirection: {x: 0, y: 0, z: 1}
+  initialVelocityDirection: {x: 1, y: 0, z: 0}
   useRandomInitialDirection: 0
   boostMultiplier: 1
   boostDuration: 3
@@ -4987,8 +4987,8 @@ MonoBehaviour:
   bossObject: {fileID: 0}
   curveStrength: 0.25
   curveResponse: 3
-  BossRef: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
-  PlayerRef: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
+  BossRef: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
+  PlayerRef: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
   trailRenderer: {fileID: 1329874284065218515}
 --- !u!114 &3987188235307287747
 MonoBehaviour:
