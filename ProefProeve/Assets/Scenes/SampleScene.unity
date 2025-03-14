@@ -36606,7 +36606,7 @@ PrefabInstance:
     - target: {fileID: 6741840712903901551, guid: b270f0db10d03524b967ba4a6d1cc1fd,
         type: 3}
       propertyPath: spawnScore
-      value: 15000
+      value: 7500
       objectReference: {fileID: 0}
     - target: {fileID: 6741840712903901551, guid: b270f0db10d03524b967ba4a6d1cc1fd,
         type: 3}
