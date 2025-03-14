@@ -19,11 +19,19 @@ public class BossDialogueManager : MonoBehaviour
     [SerializeField] private float messageCooldownTime = 10f; // Time between messages disappearing and new ones appearing
     [SerializeField] private bool showMessageOnStart = true; // Show a message immediately when activated
     
+    [Header("Sound Settings")]
+    [SerializeField] private AudioClip dialogueStartSound;
+    [SerializeField] private AudioClip typingSound;
+    [SerializeField] private AudioSource typingSoundSource;
+    [Range(0f, 1f)]
+    [SerializeField] private float typingSoundVolume = 0.5f;
+    [Range(0.8f, 1.2f)]
+    [SerializeField] private float typingSoundPitchVariation = 1.1f;
+
     [Header("Text Animation")]
     [SerializeField] private float typingSpeed = 0.05f; // Seconds per character
     [SerializeField] private float delayAfterPunctuation = 0.2f; // Additional delay after punctuation
     [SerializeField] private bool useTypewriterEffect = true; // Toggle for the typewriter effect
-    [SerializeField] private AudioSource typingSoundSource; // Optional sound effect for typing
     
     [Header("ChatGPT Integration")]
     [SerializeField] private string[] fallbackMessages = new string[] 
@@ -130,6 +138,13 @@ public class BossDialogueManager : MonoBehaviour
         else
         {
             Debug.LogWarning("ChatGPTIntegration component not found. Using fallback messages.");
+        }
+
+        // Initialize audio source if not set
+        if (typingSoundSource == null)
+        {
+            typingSoundSource = gameObject.AddComponent<AudioSource>();
+            typingSoundSource.playOnAwake = false;
         }
     }
 
@@ -294,6 +309,12 @@ public class BossDialogueManager : MonoBehaviour
         
         // Store the full message for typewriter effect
         currentFullMessage = message;
+        
+        // Play dialogue start sound
+        if (dialogueStartSound != null && typingSoundSource != null)
+        {
+            typingSoundSource.PlayOneShot(dialogueStartSound, typingSoundVolume);
+        }
             
         // Apply typewriter effect if enabled
         if (useTypewriterEffect)
@@ -337,10 +358,11 @@ public class BossDialogueManager : MonoBehaviour
             // Update the box size as we type
             StartCoroutine(UpdateDialogueBoxSize());
             
-            // Play typing sound if available
-            if (typingSoundSource != null && !typingSoundSource.isPlaying)
+            // Play typing sound with pitch variation
+            if (typingSound != null && typingSoundSource != null)
             {
-                typingSoundSource.Play();
+                typingSoundSource.pitch = UnityEngine.Random.Range(1f, typingSoundPitchVariation);
+                typingSoundSource.PlayOneShot(typingSound, typingSoundVolume);
             }
             
             // Determine delay based on character
