@@ -45,12 +45,34 @@ public class BallController : MonoBehaviour
     public Vector3 InitialVelocityDirection => useRandomInitialDirection ? 
         new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized : 
         initialVelocityDirection.normalized;
-    
+
+    // Material ref
+    public Material BossRef;
+    public Material PlayerRef;
+    public GameObject trailRenderer;
+
     // Ball ownership property
     public BallOwnerType BallOwner
     {
         get => _currentOwner;
         set => _currentOwner = value;
+    }
+
+    private void Update()
+    {
+        switch (_currentOwner)
+        {
+            case BallOwnerType.Player:
+                // Do Player logic
+                GetComponent<Renderer>().material = PlayerRef;
+                trailRenderer.GetComponent<Renderer>().material = PlayerRef;
+                break;
+            case BallOwnerType.Boss:
+                GetComponent<Renderer>().material = BossRef;
+                trailRenderer.GetComponent<Renderer>().material = BossRef;
+                // Do Boss logic
+                break;
+        }
     }
 
     private void Awake()

@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     
     [Header("Tutorial Settings")]
     [SerializeField] private float tutorialBallSpeedMultiplier = 0.3f;
+    [SerializeField] private GameObject tutorial;
+    [SerializeField] private TutorialManager tutorialManager;
     
     [Header("Game Elements")]
     [SerializeField] private GameObject playerContainer;
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
-    [SerializeField] private GameObject tutorialUI;
+    //[SerializeField] private GameObject tutorialUI;
     [SerializeField] private GameObject[] victoryObjects;
     private UIFadeManager _fadeManager;
     
@@ -68,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        tutorialManager = tutorial.GetComponent<TutorialManager>();
         if (_instance == null)
         {
             _instance = this;
@@ -189,8 +192,8 @@ public class GameManager : MonoBehaviour
         if (gameplayUI == null)
             gameplayUI = GameObject.FindGameObjectWithTag("GameplayUI");
             
-        if (tutorialUI == null)
-            tutorialUI = GameObject.FindGameObjectWithTag("TutorialUI");
+        //if (tutorialUI == null)
+          //  tutorialUI = GameObject.FindGameObjectWithTag("TutorialUI");
             
         // Log the state of found elements
         Debug.Log("After search - PlayerContainer: " + (playerContainer != null) + 
@@ -203,6 +206,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
+        tutorialManager.isBlinking = true;
+        tutorialManager.ToggleImage();
+        StartCoroutine(tutorialManager.SwitchImage());
         isTutorialMode = false;
         
         // Make sure all game elements are found
@@ -211,7 +217,7 @@ public class GameManager : MonoBehaviour
         // Set up UI with fade transitions
         if (mainMenuUI != null) _fadeManager.HideUI(mainMenuUI);
         if (gameplayUI != null) _fadeManager.ShowUI(gameplayUI);
-        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
+        //if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
         
         // Hide cursor during gameplay
         Cursor.visible = false;
@@ -251,7 +257,7 @@ public class GameManager : MonoBehaviour
         // Set up UI with fade transitions
         if (mainMenuUI != null) _fadeManager.HideUI(mainMenuUI);
         if (gameplayUI != null) _fadeManager.ShowUI(gameplayUI);
-        if (tutorialUI != null) _fadeManager.ShowUI(tutorialUI);
+        //if (tutorialUI != null) _fadeManager.ShowUI(tutorialUI);
         
         // Keep cursor visible for tutorial UI
         Cursor.visible = true;
@@ -336,7 +342,7 @@ public class GameManager : MonoBehaviour
         // Show main menu UI and hide other UIs with fade transitions
         if (mainMenuUI != null) _fadeManager.ShowUI(mainMenuUI, instant);
         if (gameplayUI != null) _fadeManager.HideUI(gameplayUI, instant);
-        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI, instant);
+        //if (tutorialUI != null) _fadeManager.HideUI(tutorialUI, instant);
     }
     
     /// <summary>
@@ -409,7 +415,7 @@ public class GameManager : MonoBehaviour
     {
         // Hide UI
         if (gameplayUI != null) _fadeManager.HideUI(gameplayUI);
-        if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
+        //if (tutorialUI != null) _fadeManager.HideUI(tutorialUI);
         
         // Hide game elements
         DisableGameElements();

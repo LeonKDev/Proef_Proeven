@@ -13,6 +13,9 @@ public class SpawnBoss : MonoBehaviour
     [Header("Dialogue System")]
     [SerializeField] private GameObject bossDialogueSystem;
 
+    [Header("Boss UI")]
+    [SerializeField] private GameObject bossUI;
+
     private bool bossSpawned;
 
     private void Update()
@@ -21,6 +24,7 @@ public class SpawnBoss : MonoBehaviour
         if (ScoreManager.Instance.Score >= spawnScore && !bossSpawned)
         {
             bossSpawned = true;
+            bossUI.SetActive(true);
             Time.timeScale = 1;
             Destroy(firstBall);
             Time.timeScale = 1;

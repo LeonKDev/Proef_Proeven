@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using System.Threading;
 
 /// <summary>
 /// Manages the tutorial mode functionality and UI
@@ -8,78 +10,51 @@ using TMPro;
 public class TutorialManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private GameObject tutorialPanel;
-    [SerializeField] private TextMeshProUGUI instructionText;
-    [SerializeField] private Button exitTutorialButton;
-    
-    [Header("Tutorial Settings")]
-    [SerializeField] private string[] tutorialInstructions;
-    [SerializeField] private float instructionDisplayTime = 5f;
-    
-    private int currentInstructionIndex = 0;
-    private float timeUntilNextInstruction;
-    
+    [SerializeField] private Image swipeMouse;
+    [SerializeField] private Image pressE;
+    [SerializeField] private Image imageToToggle;
+
+    public bool isBlinking = true;
+    private float timer = 0f;
+    public float blinkInterval = 0.5f;
+
     private void Start()
     {
-        // Only activate if we're in tutorial mode
-        if (GameManager.Instance == null || !GameManager.Instance.isTutorialMode)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-        
-        // Set up the UI
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(true);
-            
-        // Configure exit button
-        if (exitTutorialButton != null)
-            exitTutorialButton.onClick.AddListener(OnExitTutorialClicked);
-        
-        // Start the tutorial sequence
-        ShowCurrentInstruction();
-        timeUntilNextInstruction = instructionDisplayTime;
+        imageToToggle = swipeMouse;
     }
-    
+
+
     private void Update()
     {
-        // Only proceed if we're in tutorial mode
-        if (GameManager.Instance == null || !GameManager.Instance.isTutorialMode)
-            return;
-            
-        // Update instruction timing
-        if (currentInstructionIndex < tutorialInstructions.Length - 1)
+        //ToggleImage();
+        //StartCoroutine(SwitchImage());
+
+    }
+
+    public void ToggleImage()
+    {
+        if (isBlinking)
         {
-            timeUntilNextInstruction -= Time.deltaTime;
-            
-            if (timeUntilNextInstruction <= 0)
+            timer += Time.deltaTime;
+            if (timer > blinkInterval)
             {
-                currentInstructionIndex++;
-                ShowCurrentInstruction();
-                timeUntilNextInstruction = instructionDisplayTime;
+                imageToToggle.enabled = !imageToToggle.enabled;
+                timer = 0f;
             }
         }
-    }
-    
-    private void ShowCurrentInstruction()
-    {
-        if (instructionText != null && tutorialInstructions.Length > 0 && 
-            currentInstructionIndex < tutorialInstructions.Length)
+        else
         {
-            instructionText.text = tutorialInstructions[currentInstructionIndex];
+            swipeMouse.enabled = false;
+            pressE.enabled = false;
         }
     }
-    
-    private void OnExitTutorialClicked()
+
+    public IEnumerator SwitchImage()
     {
-        // Return to the main menu
-        GameManager.Instance.ReturnToMainMenu();
-    }
-    
-    private void OnDestroy()
-    {
-        // Clean up listeners
-        if (exitTutorialButton != null)
-            exitTutorialButton.onClick.RemoveListener(OnExitTutorialClicked);
+        //in StartGame(); turn bool isBlinking to true;
+        //in StartGame(); call ToggleImage(); and SwitchImage();
+        //After E is pressed during pressE make sure Tutorial Canvas is off
+        yield return new WaitForSeconds(10f);
+        imageToToggle = pressE;
     }
 }
