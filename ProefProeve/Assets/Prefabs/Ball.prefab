@@ -4987,8 +4987,8 @@ MonoBehaviour:
   bossObject: {fileID: 0}
   curveStrength: 0.25
   curveResponse: 3
-  BossRef: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
-  PlayerRef: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
+  BossRef: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
+  PlayerRef: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
   trailRenderer: {fileID: 1329874284065218515}
 --- !u!114 &3987188235307287747
 MonoBehaviour:

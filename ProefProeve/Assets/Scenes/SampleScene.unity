@@ -42586,7 +42586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8eccb748593784bbd42b105dc4ac91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiKeyStorage: {fileID: 11400000, guid: 56f60192f6fccac4e8da24380b391732, type: 2}
+  apiKeyStorage: {fileID: 11400000, guid: bfccf3fe223c8b946841dae703c85019, type: 2}
   model: gpt-4o-mini
   endpoint: https://api.openai.com/v1/chat/completions
   temperature: 1
@@ -54288,6 +54288,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: BossRef
+      value: 
+      objectReference: {fileID: 2100000, guid: 7993b316c2ed0c741b49315d06cab364, type: 2}
+    - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
+        type: 3}
+      propertyPath: PlayerRef
+      value: 
+      objectReference: {fileID: 2100000, guid: 96a26342faa9e98468bef009c65ec4b3, type: 2}
     - target: {fileID: 3087717719679615663, guid: 200608a227f129f4db65985148bd5e12,
         type: 3}
       propertyPath: bossObject
