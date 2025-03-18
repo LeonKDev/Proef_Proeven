@@ -1,22 +1,23 @@
 using UnityEngine;
+using BallGame.Shared;
 
 public class BallController : MonoBehaviour
 {
     // Movement settings
     [Header("Movement Settings")]
     [SerializeField] private float baseSpeed = 5f;
+    [SerializeField] private Vector3 initialVelocityDirection = Vector3.right; // Default direction
+    [SerializeField] private bool useRandomInitialDirection = true; // Option to use random or specified direction
     
     // Boost settings
     [Header("Boost Settings")]
     [SerializeField] private float boostMultiplier = 3f;
     [SerializeField] private float boostDuration = 0.5f;
     
-    // Bat interaction settings
-    [Header("Bat Interaction")]
-    [SerializeField] private GameObject batObject;
-    [SerializeField] private GameObject playerObject; // Added reference to the player object
-    [SerializeField] private float normalBounceMultiplier = 2f; // For 1-2 unit range
-    [SerializeField] private float closeRangeBounceMultiplier = 3.5f; // For 0-1 unit range
+    // References for targeting
+    [Header("Targeting References")]
+    [SerializeField] private GameObject playerObject;
+    [SerializeField] private GameObject bossObject;
     
     // Curving behavior settings
     [Header("Curving Behavior")]
@@ -28,16 +29,51 @@ public class BallController : MonoBehaviour
     private BallBoostHandler _boostHandler;
     private BallCollisionHandler _collisionHandler;
     
+    // State tracking
+    private bool _isPerfectHit = false;
+    private BallOwnerType _currentOwner = BallOwnerType.Boss;
+    
     // Properties to access settings from other components
     public float BaseSpeed => baseSpeed;
     public float BoostMultiplier => boostMultiplier;
     public float BoostDuration => boostDuration;
-    public GameObject BatObject => batObject;
-    public GameObject PlayerObject => playerObject; // New property to access player object
-    public float NormalBounceMultiplier => normalBounceMultiplier;
-    public float CloseRangeBounceMultiplier => closeRangeBounceMultiplier;
     public float CurveStrength => curveStrength;
     public float CurveResponse => curveResponse;
+    public bool IsPerfectHit => _isPerfectHit;
+    public GameObject PlayerObject => playerObject;
+    public GameObject BossObject => bossObject;
+    public Vector3 InitialVelocityDirection => useRandomInitialDirection ? 
+        new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized : 
+        initialVelocityDirection.normalized;
+
+    // Material ref
+    public Material BossRef;
+    public Material PlayerRef;
+    public GameObject trailRenderer;
+
+    // Ball ownership property
+    public BallOwnerType BallOwner
+    {
+        get => _currentOwner;
+        set => _currentOwner = value;
+    }
+
+    private void Update()
+    {
+        switch (_currentOwner)
+        {
+            case BallOwnerType.Player:
+                // Do Player logic
+                GetComponent<Renderer>().material = PlayerRef;
+                trailRenderer.GetComponent<Renderer>().material = PlayerRef;
+                break;
+            case BallOwnerType.Boss:
+                GetComponent<Renderer>().material = BossRef;
+                trailRenderer.GetComponent<Renderer>().material = BossRef;
+                // Do Boss logic
+                break;
+        }
+    }
 
     private void Awake()
     {
@@ -45,6 +81,15 @@ public class BallController : MonoBehaviour
         _movementHandler = gameObject.AddComponent<BallMovementHandler>();
         _boostHandler = gameObject.AddComponent<BallBoostHandler>();
         _collisionHandler = gameObject.AddComponent<BallCollisionHandler>();
+        
+        // Find reference objects if not set
+        if (playerObject == null) {
+            playerObject = GameObject.FindGameObjectWithTag("Player");
+        }
+        
+        if (bossObject == null) {
+            bossObject = GameObject.FindGameObjectWithTag("Boss");
+        }
     }
     
     private void Start()
@@ -53,30 +98,42 @@ public class BallController : MonoBehaviour
         _movementHandler.Initialize(this);
         _boostHandler.Initialize(this, _movementHandler);
         _collisionHandler.Initialize(this, _movementHandler);
+        
+        // Register this ball with the BallRegistrationManager
+        BallRegistrationManager.Instance.RegisterBall(this);
     }
     
-    private void Update()
+    private void OnDestroy()
     {
-        // Check for bat hit input
-        if (Input.GetKeyDown(KeyCode.E) && batObject != null && playerObject != null)
+        // Unregister this ball when destroyed
+        if (BallRegistrationManager.Instance != null)
         {
-            float distanceToBat = Vector3.Distance(transform.position, batObject.transform.position);
-            if (distanceToBat <= 4f)
-            {
-                // Use player's forward direction instead of bat's forward
-                Vector3 playerDirection = playerObject.transform.forward;
-                float bounceMultiplier = distanceToBat <= 2f ? closeRangeBounceMultiplier : normalBounceMultiplier;
-                _boostHandler.ApplyBatBoost(playerDirection, bounceMultiplier);
-            }
+            BallRegistrationManager.Instance.UnregisterBall(this);
         }
     }
     
-    /// <summary>
-    /// Returns the last GameObject that the ball collided or triggered with.
-    /// </summary>
-    /// <returns>The GameObject from the last collision or trigger event, or null if none has occurred.</returns>
+    public void SetPerfectHit(bool isPerfect)
+    {
+        _isPerfectHit = isPerfect;
+    }
+    
     public GameObject GetLastCollidedObject()
     {
         return _collisionHandler.GetLastCollidedObject();
+    }
+    
+    public void ResetPerfectHitState()
+    {
+        _isPerfectHit = false;
+    }
+    
+    public BallBoostHandler GetBoostHandler()
+    {
+        return _boostHandler;
+    }
+    
+    public BallMovementHandler GetMovementHandler()
+    {
+        return _movementHandler;
     }
 }
